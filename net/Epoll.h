@@ -1,12 +1,12 @@
 #pragma once
 #include "Channel.h"
-#include "HttpData.h"
-#include "Timer.h"
+//#include "HttpData.h"
+//#include "Timer.h"
 #include <vector>
 #include <unordered_map>
 #include <sys/epoll.h>
 #include <memory>
-
+typedef shared_ptr<Channel> SP_Channel;
 class Epoll
 {
 public:
@@ -29,7 +29,7 @@ private:
 	int epollFd_;
 	std::vector<epoll_event> events_;
 	std::shared_ptr<Channel> fd2chan_[MAXFDS];
-	std::shared_ptr<HttpData> fd2http_[MAXFDS];
+//	std::shared_ptr<HttpData> fd2http_[MAXFDS];
 	TimerManager timerManager_;
 
 

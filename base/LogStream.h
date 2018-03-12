@@ -36,11 +36,11 @@ public:
 
 
 private:
-	const char* end() const{ return data_+sizeof data;}
+	const char* end() const{ return data_+sizeof data_;}
 
 	char data_[SIZE];
 	char* cur_;
-}
+};
 
 
 
@@ -51,7 +51,7 @@ public:
 
 	LogStream& operator<<(bool v)
 	{
-		buufer_.append(v?"1":"0",1);
+		buffer_.append(v?"1":"0",1);
 		return *this;
 	}
     LogStream& operator<<(short);
@@ -103,12 +103,12 @@ public:
 private:
 
 	template<typename T>
-	void formatInterer(T);
+	void formatInteger(T);
 
 	Buffer buffer_;
-	static const int kMaxNumerricSize=32;
+	static const int kMaxNumericSize=32;
 
 	void staticCheck();
 
 
-}
+};

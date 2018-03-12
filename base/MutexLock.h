@@ -8,16 +8,20 @@ class MutexLock: noncopyable
 public:
 	MutexLock()
 	{
-		ptread_mutex_init(&mutex,nullptr);
+		pthread_mutex_init(&mutex,NULL);
 	}
 	~MutexLock()
 	{
 		pthread_mutex_lock(&mutex);
-		pthread_mutexdestroy(&mutexx);
+		pthread_mutex_destroy(&mutex);
 	}
 	void lock()
 	{
 		pthread_mutex_lock(&mutex);
+	}
+	void unlock()
+	{
+		pthread_mutex_unlock(&mutex);
 	}
 	pthread_mutex_t *get()
 	{
@@ -27,12 +31,13 @@ public:
 private:
 	pthread_mutex_t mutex;
 	friend class Condition;
-}
+};
 
 class MutexLockGuard: noncopyable
 {
+public:
 explicit MutexLockGuard(MutexLock &_mutex)
-		：mutex(_mutex)
+		:mutex(_mutex)
 	{
 		mutex.lock();
 	}
@@ -42,4 +47,4 @@ explicit MutexLockGuard(MutexLock &_mutex)
 	}
 private:
 	MutexLock &mutex;
-}
+};

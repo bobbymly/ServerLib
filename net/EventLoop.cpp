@@ -1,5 +1,5 @@
 #include "EventLoop.h"
-#include "base/Logging.h"
+#include "../base/Logging.h"
 #include "Util.h"
 #include <sys/eventfd.h>
 #include <sys/epoll.h>
@@ -22,7 +22,7 @@ int createEventfd()
 
 EventLoop::EventLoop():
 	looping_(false),
-	pooler_(new Epoll()),
+	poller_(new Epoll()),
 	wakeupFd_(createEventfd()),
 	quit_(false),
 	eventHandling_(false),
@@ -71,7 +71,7 @@ void EventLoop::handleRead()
 {
 	uint64_t one=1;
 	ssize_t n=readn(wakeupFd_,&one,sizeof(one));
-	if(n1=sizeof(one))
+	if(n=sizeof(one))
 	{
 		LOG<<"EventLoop::handleRead() reads "<<n<<" bytes instead of 8";
 	}

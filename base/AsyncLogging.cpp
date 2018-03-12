@@ -5,16 +5,16 @@
 #include <unistd.h>
 #include <functional>
 
-AsyncLogging::AsyncLogging(std::string logFileName,int flushInterval):
+AsyncLogging::AsyncLogging(std::string logFileName_,int flushInterval):
 	flushInterval_(flushInterval),
-	runing_(false),
-	basename_(logFileName),
-	thread_(std::bind(&AsyncLogging::threadFunc,this),"Logging");
-	mutex_();
+	running_(false),
+	basename_(logFileName_),
+	thread_(std::bind(&AsyncLogging::threadFunc,this),"Logging"),
+	mutex_(),
 	cond_(mutex_),
-	currentBuffer_(new Buffer);
-	nextBuffer_(new Buffer);
-	buffers_();
+	currentBuffer_(new Buffer),
+	nextBuffer_(new Buffer),
+	buffers_(),
 	latch_(1)
 {
 	assert(logFileName_.size()>1&&logFileName_[0]=='/');
@@ -29,14 +29,14 @@ AsyncLogging::~AsyncLogging()
 		stop();
 }
 
-void start()
+void AsyncLogging::start()
 {
 	running_=true;
 	thread_.start();
 	latch_.wait();
 }
 
-void stop()
+void AsyncLogging::stop()
 {
 	running_=false;
 	cond_.notify();
@@ -63,7 +63,7 @@ void AsyncLogging::append(const char* logline,int len)
 
 void AsyncLogging::threadFunc()
 {
-	assert(rungning_==true);
+	assert(running_==true);
 	latch_.countDown();
 	LogFile output(basename_);
 	BufferPtr newBuffer1(new Buffer);
@@ -95,7 +95,7 @@ void AsyncLogging::threadFunc()
 
 		if(buffersToWrite.size()>25)
 			buffersToWrite.erase(buffersToWrite.begin()+2,buffersToWrite.end());
-		for(seze_t i=0;i<buffersToWrite.size();++i)
+		for(size_t i=0;i<buffersToWrite.size();++i)
 			output.append(buffersToWrite[i]->data(),buffersToWrite[i]->length());
 		if(buffersToWrite.size()>2)
 			buffersToWrite.resize(2);
