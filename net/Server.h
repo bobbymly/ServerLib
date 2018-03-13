@@ -4,7 +4,8 @@
 #include "EventLoopThreadPool.h"
 #include <memory>
 
-
+//服务器类封装
+//未完成
 class Server
 {
 public:
