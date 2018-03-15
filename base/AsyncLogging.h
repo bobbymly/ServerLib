@@ -5,17 +5,17 @@
 #include "LogStream.h"
 #include "CountDownLatch.h"
 #include <functional>
-#include <stirng>
+#include <string>
 #include <vector>
 
-class AsycLogging:noncopyable
+class AsyncLogging:noncopyable
 {
 public:
-	AsynocLoging(Const std::string basename,int flushInterval=2);
-	~AsynocLoging();
+	AsyncLogging(const std::string basename,int flushInterval=2);
+	~AsyncLogging();
 	void  append(const char* logline,int len);
 
-	void star();
+	void start();
 	void stop();
 
 private:
@@ -25,14 +25,14 @@ private:
 	typedef std::shared_ptr<Buffer> BufferPtr;
 	const int flushInterval_;
 	bool running_;
-	std::sring basename_;
+	std::string basename_;
 	Thread thread_;
-	Mutexlock mutex_;
-	Condithion cond_;
+	MutexLock mutex_;
+	Condition cond_;
 	BufferPtr currentBuffer_;
 	BufferPtr nextBuffer_;
 	BufferVector buffers_;
 	CountDownLatch latch_;
 
 
-}
+};

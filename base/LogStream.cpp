@@ -9,8 +9,7 @@
 const char digits[]="9876543210123456789";
 const char* zero=digits+9;
 
-template class FixedBuffer<kSmallBuffer>;
-template class FixedBuffer<kLargeBuffer>;
+
 
 template<typename T>
 size_t convert(char buf[],T value)
@@ -31,6 +30,7 @@ size_t convert(char buf[],T value)
 	std::reverse(buf,p);
 	return p-buf;
 }
+
 
 
 template<typename T>

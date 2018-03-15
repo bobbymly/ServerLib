@@ -57,7 +57,7 @@ struct ThreadData
 		latch_->countDown();
 		latch_=NULL;
 
-		CurrentThread::t_thredName=name_.empty()?"Thread":name.c_str();
+		CurrentThread::t_threadName=name_.empty()?"Thread":name_.c_str();
 		prctl(PR_SET_NAME,CurrentThread::t_threadName);		//设置线程名
 
 		func_();
@@ -90,11 +90,11 @@ Thread::Thread(const ThreadFunc &func,const string &n):
 
 Thread::~Thread()
 {
-	if(started_&&!joined)
+	if(started_&&!joined_)
 		pthread_detach(pthreadId_);		//防止产生僵尸线程
 }
 
-void THread::setDefaultName()
+void Thread::setDefaultName()
 {
 	if(name_.empty())
 	{

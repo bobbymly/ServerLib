@@ -1,5 +1,4 @@
 #pragma once
-#include "Timer.h"
 #include <string>
 #include <unordered_map>
 #include <memory>
@@ -8,9 +7,8 @@
 #include <sys/epoll.h>
 
 class EventLoop;
-class HttpData;
 
-
+typedef std::function<void()> CallBack;
 
 class Channel
 {
@@ -20,16 +18,6 @@ public:
 	~Channel();
 	int getFd();
 	void setFd(int fd);
-
-	void setHolder(std::shared_ptr<HttpData> holder)
-	{
-		holder_=holder;
-	}
-	std::shared_ptr<HttpData> getHolder()
-	{
-		std::shared_ptr<HttpData> ret(holder_.lock());
-		return ret;
-	}
 
 	void setReadHandler(CallBack &&readHandler)
 	{
@@ -78,7 +66,7 @@ public:
 	void handleError(int fd,int err_num,std::string short_msg);
 	void handleConn();
 
-	void setRevents(__unit32_t revents)
+	void setRevents(__uint32_t revents)
 	{
 		revents_=revents;
 	}
@@ -104,14 +92,13 @@ public:
 
 
 private:
-	typedef std::function<void()> CallBack;
+	
 	EventLoop *loop_;
 	int fd_;
-	__unit32_t events_;
-	__unit32_t revents_;
-	__unit32_t lastEvents_;
+	__uint32_t events_;
+	__uint32_t revents_;
+	__uint32_t lastEvents_;
 
-	std::weak_ptr<HttpData> holder_;
 
 	int parse_URI();
 	int parse_Headers();
@@ -125,4 +112,3 @@ private:
 
 
 
-typedef std::shared_ptr<Channel> SP_Channel;

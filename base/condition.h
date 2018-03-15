@@ -1,5 +1,5 @@
 #pragma once
-#include "noncopyable"
+#include "noncopyable.h"
 #include "MutexLock.h"
 #include <pthread.h>
 #include <errno.h>
@@ -9,11 +9,12 @@
 class Condition: noncopyable
 {
 public:
-	exlicit Condition(MutexLock &_mutex):
+	explicit Condition(MutexLock &_mutex):
 		mutex(_mutex)
 	{
 		pthread_cond_init(&cond,nullptr);
 	}
+
 	~Condition()
 	{
 		pthread_cond_destroy(&cond);
@@ -21,6 +22,10 @@ public:
 	void wait()
 	{
 		pthread_cond_wait(&cond,mutex.get());
+	}
+	void notify()
+	{
+		pthread_cond_signal(&cond);
 	}
 	void notifyAll()
 	{
@@ -38,4 +43,4 @@ public:
 private:
 	MutexLock &mutex;
 	pthread_cond_t cond;
-}
+};

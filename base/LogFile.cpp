@@ -6,16 +6,16 @@
 #include <time.h>
 using namespace std;
 
-LogFile::LogFile(const string& basenae,int flushEveryN):
+LogFile::LogFile(const string& basename,int flushEveryN):
 	basename_(basename),
 	flushEveryN_(flushEveryN),
 	count_(0),
 	mutex_(new MutexLock)
 {
-	//file.reset(new AppendFile(basename));
+	file_.reset(new AppendFile(basename));
 }
 
-LogFile::~logFile(){}
+LogFile::~LogFile(){}
 
 void LogFile::append(const char* logline,int len)
 {
@@ -27,7 +27,7 @@ void LogFile::append_unlocked(const char* logline,int len)
 {
 	file_->append(logline,len);
 	++count_;
-	if(count_>=flushEverN_)
+	if(count_>=flushEveryN_)
 	{
 		count_=0;
 		file_->flush();

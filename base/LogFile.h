@@ -1,4 +1,4 @@
-#progma once
+#pragma once
 #include "FileUtil.h"
 #include "MutexLock.h"
 #include "noncopyable.h"
@@ -8,7 +8,7 @@
 class LogFile:noncopyable
 {
 public:
-	LogFile(const stdd::string& basename,int flushEveryN = 1024);
+	LogFile(const std::string& basename,int flushEveryN = 1024);
 	~LogFile();
 
 	void append(const char* logline,int len);
@@ -25,4 +25,4 @@ private:
 	const int flushEveryN_;
 
 	void append_unlocked(const char* logline,int len);
-}
+};
