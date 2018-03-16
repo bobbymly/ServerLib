@@ -12,7 +12,7 @@ LogFile::LogFile(const string& basename,int flushEveryN):
 	count_(0),
 	mutex_(new MutexLock)
 {
-	//file.reset(new AppendFile(basename));
+	file_.reset(new AppendFile(basename));
 }
 
 LogFile::~LogFile(){}

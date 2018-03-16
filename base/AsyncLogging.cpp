@@ -5,10 +5,10 @@
 #include <unistd.h>
 #include <functional>
 
-AsyncLogging::AsyncLogging(std::string logFileName_,int flushInterval):
+AsyncLogging::AsyncLogging(std::string basename,int flushInterval):
 	flushInterval_(flushInterval),
 	running_(false),
-	basename_(logFileName_),
+	basename_(basename),
 	thread_(std::bind(&AsyncLogging::threadFunc,this),"Logging"),
 	mutex_(),
 	cond_(mutex_),
@@ -17,7 +17,7 @@ AsyncLogging::AsyncLogging(std::string logFileName_,int flushInterval):
 	buffers_(),
 	latch_(1)
 {
-	assert(logFileName_.size()>1&&logFileName_[0]=='/');
+	assert(basename.size()>1&&basename[0]=='/');
 	currentBuffer_->bzero();
 	nextBuffer_->bzero();
 	buffers_.reserve(16);

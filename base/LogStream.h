@@ -37,13 +37,14 @@ public:
 
 private:
 	const char* end() const{ return data_+sizeof data_;}
-
 	char data_[SIZE];
 	char* cur_;
 };
 
 
 
+
+//重载一系列 << 运算符
 class LogStream:noncopyable
 {
 public:

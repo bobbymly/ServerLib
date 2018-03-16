@@ -11,7 +11,7 @@
 static pthread_once_t once_control_ = PTHREAD_ONCE_INIT;
 static AsyncLogging *AsyncLogger_;
 
-std::string Logger::logFileName_ = "/linya_WebServer.log";
+std::string Logger::logFileName_ = "/bobbymly_ServerLib.log";
 
 void once_init()
 {
@@ -33,6 +33,7 @@ Logger::Impl::Impl(const char *fileName, int line)
     formatTime();
 }
 
+//加入时间信息
 void Logger::Impl::formatTime()
 {
     struct timeval tv;
