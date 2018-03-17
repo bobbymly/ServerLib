@@ -1,4 +1,5 @@
 #include "EventLoopThread.h"
+#include <assert.h>
 #include <functional>
 
 EventLoopThread::EventLoopThread():
@@ -15,19 +16,19 @@ EventLoopThread::~EventLoopThread()
 	exiting_=true;
 	if(loop_!=NULL)
 	{
-		loop->quit();
+		loop_->quit();
 		thread_.join();
 	}
 }
 
-EventLoop* EventLooopThread::startLoop()
+EventLoop* EventLoopThread::startLoop()
 {
 	assert(!thread_.started());
 	thread_.start();
 
 	{
 		MutexLockGuard lock(mutex_);
-		while(loop==NULL)
+		while(loop_==NULL)
 			cond_.wait();
 
 	}
