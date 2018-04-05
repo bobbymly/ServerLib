@@ -54,7 +54,7 @@ void Server::handNewConn()
 		setSocketNodelay(accept_fd);
 
 		shared_ptr<Channel> ch(new Channel(loop,accept_fd));
-		ch->setEvents(DEFAULT_EVENT);
+		ch->setEvents(DEFUALT_EVENT);
 		loop->addToPoller();
 
 	}
