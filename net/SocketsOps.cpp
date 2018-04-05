@@ -1,0 +1,83 @@
+#include <SocketsOps.h>
+#include <base/Logging.h>
+#include <string.h>
+#include <sys/socket.h>
+#include <stdio.h>
+
+const struct sockaddr* sockaddr_cast(const struct sockaddr_in6* addr)
+{
+    return static_cast<const struct sockaddr*>((void*)addr);
+}
+
+const struct sockaddr* sockaddr_cast(const struct sockaddr_in* addr)
+{
+    return static_cast<const struct sockaddr*>((void*)addr);
+}
+
+const struct sockaddr_in* sockaddr_in_cast(const struct sockaddr* addr)
+{
+    return static_cast<const struct sockaddr_in*>((void*)addr);
+}
+
+const struct sockaddr_in6* sockaddr_in6_cast(const struct sockaddr* addr)
+{
+    return static_cast<const struct sockaddr_in6*>((void*)addr);
+}
+
+
+
+//在buf中写入IP地址和端口号
+void sockets::toIpPort(char* buf,size_t size,const struct sockaddr* addr)
+{
+    toIp(buf,size,addr);
+    size_t end = strlen(buf);
+    const struct sockaddr_in* addr4 = sockaddr_in_cast(addr);
+    uint16_t port = ntohs(addr4->sin_port);
+    assert(size>end);
+    snprintf(buf+end,size-end,":%u",port);
+}
+//在buf中写入端口号
+void sockets::toIp(char* buf,size_t size,const struct sockaddr* addr)
+{
+    if(addr->sa_family == AF_INET)
+    {
+        assert(size>=INET_ADDRSTRLEN);
+        const struct sockaddr_in* addr4 = sockaddr_in_cast(addr);
+        inet_ntop(AF_INET,&addr4->sin_addr,buf,static_cast<socklen_t>(size));
+    }
+    else if(addr->sa_family == AF_INET6)
+    {
+        assert(size>=INET6_ADDRSTRLEN);
+        const struct sockaddr_in6* addr6 = sockaddr_in6_cast(addr);
+        inet_ntop(AF_INET6,&addr6->sin6_addr,buf,static_cast<socklen_t>(size));
+    }
+}
+//向 sockaddr_in 中填充 ip 和 端口 信息
+void sockets::fromIpPort(const char* ip,uint16_t port,struct sockaddr_in* addr)
+{
+    addr->sin_family = AF_INET;
+    addr->sin_port = htons(port);
+    if(inet_pton(AF_INET,ip,&addr->sin_addr)<=0)
+    {
+        LOG<<"fromIpPort error";
+    }
+}
+
+//向 sockaddr_in6 中填充 ip 和 端口 信息
+void sockets::fromIpPort(const char* ip,uint16_t port,struct sockaddr_in6* addr)
+{
+    addr->sin6_family = AF_INET6;
+    addr->sin6_port = htons(port);
+    if(inet_pton(AF_INET6,ip,&addr->sin6_addr)<=0)
+    {
+        LOG<<"fromIpPort error";
+    }
+}
+
+
+
+
+
+
+
+
