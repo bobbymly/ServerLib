@@ -3,10 +3,18 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <stdio.h>
+#include <fcntl.h>
+#include <sys/uio.h>
+#include <unistd.h>
 
 const struct sockaddr* sockaddr_cast(const struct sockaddr_in6* addr)
 {
     return static_cast<const struct sockaddr*>((void*)addr);
+}
+
+struct sockaddr* sockaddr_cast(struct sockaddr_in6* addr)
+{
+    return static_cast<struct sockaddr*>((void*)addr);
 }
 
 const struct sockaddr* sockaddr_cast(const struct sockaddr_in* addr)
@@ -75,9 +83,73 @@ void sockets::fromIpPort(const char* ip,uint16_t port,struct sockaddr_in6* addr)
 }
 
 
+void sockets::close(int sockfd)
+{
+    if(::close(sockfd)<0)
+    {
+        LOG<<"sockets::close";
+    }
+}
+
+void sockets::bindOrDie(int sockfd,const struct sockaddr* addr)
+{
+    int ret = ::bind(sockfd,addr,static_cast<socklen_t>(sizeof(struct sockaddr_in6)));
+    if(ret < 0)
+    {
+        LOG<<"sockets::listenOrDie";
+    }
+}
+
+void sockets::listenOrDie(int sockfd)
+{
+    int ret = ::listen(sockfd,SOMAXCONN);
+    if(ret < 0)
+    {
+        LOG<<"sockets::listenOrDie";
+    }
+}
 
 
+int sockets::accept(int sockfd,struct sockaddr_in6* addr)
+{
+    socklen_t addrlen = static_cast<socklen_t>(sizeof *addr);
+    int connfd = ::accept(sockfd,sockaddr_cast(addr),&addrlen);
+    if(connfd<0)
+    {
+        int savedErrno = errno;
+        LOG<<"Socket::accept";
+        switch(savedErrno)
+        {
+            case EAGAIN:
+            case ECONNABORTED:
+            case EINTR:
+            case EPERM:
+            case EMFILE:
+                errno = savedErrno;
+                break;
+            case EBADF:
+            case EFAULT:
+            case EINVAL:
+            case ENFILE:
+            case ENOBUFS:
+            case ENOMEM:
+            case ENOTSOCK:
+            case EOPNOTSUPP:
+                LOG<<"unexpected error of ::accept "<<savedErrno;
+                break;
+            default:
+                LOG<<"unknown error of ::accept "<<savedErrno;
+                break;
+        }
+    }
+    return connfd;
+}
 
-
-
+void sockets::shutdownWrite(int sockfd)
+{
+    if(::shutdown(sockfd,SHUT_WR)<0)
+    {
+        LOG<<"sockets:: shutdownWrite error";
+    }
+}
 

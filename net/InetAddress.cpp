@@ -96,7 +96,7 @@ bool InetAddress::resolve(string hostname,InetAddress* out)
     {
         if(ret)
         {
-            LOG<<"InetAddress::resolve";
+            LOG<<"InetAddress::resolve error";
         }
         return false;
     }
