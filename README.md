@@ -42,6 +42,7 @@ C++ Library for server
  
  ## 网络（进展中）
  * InetAddress :封装 IP 地址及各种操作
+ * Socket/SocketsOps :封装对 Socket 的操作 
  * Server ：用于编写网络服务器，接受客户连接，封装繁杂的函数
  * Client ：用于编写网络客户端，发起连接
  
