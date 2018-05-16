@@ -13,7 +13,7 @@ class FixedBuffer : noncopyable
 public:
 	FixedBuffer():
 		cur_(data_)
-		{}
+	{}
 
 	~FixedBuffer(){}
 
@@ -32,8 +32,6 @@ public:
 			cur_+=len;
 		}
 	}
-
-
 
 private:
 	const char* end() const{ return data_+sizeof data_;}

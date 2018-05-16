@@ -3,7 +3,7 @@
 #include "base/Logging.h"
 #include <unistd.h>
 #include <vector>
-#include <base/Thread.h>
+#include "base/Thread.h"
 using namespace std;
 void type_test();
 void threadFunc();

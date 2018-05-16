@@ -118,5 +118,5 @@ void AsyncLogging::threadFunc()
 		buffersToWrite.clear();
 		output.flush();
 	}
-	output.flush();;
+	output.flush();
 }
