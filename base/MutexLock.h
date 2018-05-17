@@ -3,7 +3,7 @@
 #include <pthread.h>
 #include <cstdio>
 
-class MutexLock: noncopyable
+class MutexLock
 {
 public:
 	MutexLock()

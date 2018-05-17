@@ -1,5 +1,5 @@
 #include "Socket.h"
-#include "base/Logging.h"
+#include "../base/Logging.h"
 #include "InetAddress.h"
 #include "SocketsOps.h"
 #include <netinet/in.h>
@@ -57,6 +57,7 @@ void Socket::listen()
 
 int Socket::accept(InetAddress* peeraddr)
 {
+    //LOG <<"1";
     struct sockaddr_in6 addr;
     bzero(&addr,sizeof addr);
     int connfd = sockets::accept(sockfd_,&addr);

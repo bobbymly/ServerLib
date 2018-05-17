@@ -1,11 +1,12 @@
-#include "base/copyable.h"
+//#include "../base/copyable.h"
+#pragma once
 #include <netinet/in.h>
 #include <string>
 using namespace std;
 
 const struct sockaddr* sockaddr_cast(const struct sockaddr_in6* addr);
 
-class InetAddress : copyable
+class InetAddress 
 {
 public:
     explicit InetAddress(uint16_t port = 0,bool loopbackOnly = false,bool ipv6 = false);

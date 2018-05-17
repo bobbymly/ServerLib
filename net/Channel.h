@@ -108,7 +108,7 @@ private:
 	CallBack writeHandler_;
 	CallBack errorHandler_;
 	CallBack connHandler_;
-}
+};
 
 
 

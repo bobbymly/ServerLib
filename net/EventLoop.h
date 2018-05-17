@@ -1,9 +1,9 @@
 #pragma once
-#include "base/Thread.h"
+#include "../base/Thread.h"
 #include "Epoll.h"
-#include "base/Logging.h"
+#include "../base/Logging.h"
 #include "Channel.h"
-#include "base/CurrentThread.h"
+#include "../base/CurrentThread.h"
 #include "Util.h"
 #include <vector>
 #include <memory>
@@ -24,7 +24,7 @@ public:
 	void quit();
 	void runInLoop(Functor&& cb);
 	void queueInLoop(Functor&& cb);
-	bool isInLoopThread()const{	return threadId_==CurrentThread;}
+	bool isInLoopThread()const{	return threadId_==CurrentThread::tid();}
 	void assertInLoopThread()
 	{
 		assert(isInLoopThread());
@@ -32,7 +32,7 @@ public:
 
 	void shutdown(shared_ptr<Channel>channel)
 	{
-		shutDownWR(channel->getFD());
+		shutDownWR(channel->getFd());
 	}
 	void removeFromPoller(shared_ptr<Channel>channel)
 	{
@@ -59,7 +59,7 @@ private:
 	std::vector<Functor> pendingFunctors_;
 	bool callingPendingFunctors_;
 	const pid_t threadId_;
-	shared_ptr<Channel> pwakupChannel_;
+	shared_ptr<Channel> pwakeupChannel_;
 
 	void wakeup();
 	void handleRead();

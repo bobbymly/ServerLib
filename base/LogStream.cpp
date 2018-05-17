@@ -12,7 +12,7 @@ const char* zero=digits+9;
 
 
 template<typename T>
-size_t convert(char buf[],T value)
+size_t convert(char buf[],T 	)
 {
 	T i=value;
 	char *p=buf;
@@ -28,7 +28,7 @@ size_t convert(char buf[],T value)
 	}
 	*p='\0';
 	std::reverse(buf,p);
-	return p-buf;
+	return static_cast<int>(p-buf);
 }
 
 

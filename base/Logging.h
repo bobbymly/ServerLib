@@ -1,4 +1,4 @@
-//#pragma once
+#pragma once
 #include "LogStream.h"
 #include <pthread.h>
 #include <string.h>

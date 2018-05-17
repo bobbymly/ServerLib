@@ -1,5 +1,5 @@
 #include "EventLoop.h"
-#include "base/Logging.h"
+#include "../base/Logging.h"
 #include "Util.h"
 #include <sys/eventfd.h>
 #include <sys/epoll.h>
@@ -81,7 +81,7 @@ void EventLoop::handleRead()
 
 void EventLoop::runInLoop(Functor&& cb)
 {
-	if(isInloopThread())
+	if(isInLoopThread())
 		cb();
 	else
 		queueInLoop(std::move(cb));
@@ -100,10 +100,10 @@ void EventLoop::queueInLoop(Functor&& cb)
 void EventLoop::loop()
 {
 	assert(!looping_);
-	assert(isInLoopThread())
+	assert(isInLoopThread());
 	looping_=true;
 	quit_=false;
-	LOG<<"EventLoop "<<this<<" start looping";
+	LOG<<"EventLoop "<<(long)this<<" start looping";
 	std::vector<SP_Channel>ret;
 	while(!quit_)
 	{
@@ -131,7 +131,7 @@ void EventLoop::doPendingFunctors()
 
 	for(size_t i=0;i<functors.size();++i)
 		functors[i]();
-	callingpendingFunctors_=false;
+	callingPendingFunctors_=false;
 }
 
 void EventLoop::quit()

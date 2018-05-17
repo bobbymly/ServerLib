@@ -1,15 +1,15 @@
 #include <stdint.h>
 #include <endian.h>
-#include <InetAddress.h>
+#include "InetAddress.h"
 #include <string>
 #include <string.h>
 #include <netinet/in.h>
 #include <netdb.h>
 #include <stddef.h>
-#include <base/Logging.h>
+#include "../base/Logging.h"
 #include <sys/socket.h>
 #include <arpa/inet.h>
-#include "SocketOps.h"
+#include "SocketsOps.h"
 
 static const in_addr_t kInaddrAny = INADDR_ANY;
 static const in_addr_t kInaddrLoopback = INADDR_LOOPBACK;
@@ -64,7 +64,7 @@ string InetAddress::toIp()const
     return buf;
 }
 
-uint16_t InetAddress::ipNetEndian()const
+uint32_t InetAddress::ipNetEndian()const
 {
     assert(family() == AF_INET);
     return addr_.sin_addr.s_addr;
@@ -79,7 +79,7 @@ static __thread char t_resolveBuffer[64*1024];
 
 bool InetAddress::resolve(string hostname,InetAddress* out)
 {
-    asset(out!=NULL);
+    assert(out!=NULL);
     struct hostent hent;
     struct hostent* he = NULL;
     int herrno = 0;

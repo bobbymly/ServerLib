@@ -1,5 +1,5 @@
-#include <SocketsOps.h>
-#include <base/Logging.h>
+#include "SocketsOps.h"
+#include "../base/Logging.h"
 #include <string.h>
 #include <sys/socket.h>
 #include <stdio.h>
@@ -113,7 +113,9 @@ void sockets::listenOrDie(int sockfd)
 int sockets::accept(int sockfd,struct sockaddr_in6* addr)
 {
     socklen_t addrlen = static_cast<socklen_t>(sizeof *addr);
+    LOG << "3";
     int connfd = ::accept(sockfd,sockaddr_cast(addr),&addrlen);
+    LOG <<"2";
     if(connfd<0)
     {
         int savedErrno = errno;
