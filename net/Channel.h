@@ -7,6 +7,7 @@
 #include <sys/epoll.h>
 #include "../base/Logging.h"
 #include <iostream>
+#include <sstream>
 #include <unistd.h>
 class EventLoop;
 
@@ -38,13 +39,39 @@ public:
 		connHandler_=connHandler;
 	}
 
+
+	std::string eventsToString(int ev)
+	{
+		std::ostringstream oss;
+		oss << ": ";
+		if (ev & EPOLLIN)
+			oss << "IN ";
+		if (ev & EPOLLPRI)
+			oss << "PRI ";
+		if (ev & EPOLLOUT)
+			oss << "OUT ";
+		if (ev & EPOLLHUP)
+			oss << "HUP ";
+		if (ev & EPOLLRDHUP)
+			oss << "RDHUP ";
+		if (ev & EPOLLERR)
+			oss << "ERR ";
+		// if (ev & EPOLLNVAL)
+		// 	oss << "NVAL ";
+
+		return oss.str().c_str();
+	}
+
 	void handleEvents()
 	{
-		LOG <<"HANDLE EVENT";
+		//LOG <<"HANDLE EVENT";
 		events_=0;
-		if((revents_&EPOLLHUP)&&!(revents_&EPOLLIN))
+		std::cout<<eventsToString(revents_)<<std::endl;
+		LOG <<eventsToString(revents_);
+		if((revents_&EPOLLRDHUP)&&!(revents_&EPOLLIN))
 		{
-			LOG <<"IN EVENT";
+			LOG <<"CLOSE EVENT";
+			//removeFrom
 			events_=0;
 			return;
 		}
@@ -99,17 +126,17 @@ public:
 
 	void readAll()
 	{
-		std::cout<<"readALL"<<std::endl;
+		//std::cout<<"readALL"<<std::endl;
 		char buf[1024];
 		int n;
 		n=read(fd_,buf,sizeof buf);
 		std::cout<<buf;
-		// while(n>0)
-		// {
-		// 	n=read(fd_,buf,sizeof buf);	
-		// 	std::cout<<buf;
-		// }
-		// std::cout<<buf;
+		while(n>0)
+		{
+			n=read(fd_,buf,sizeof buf);	
+			std::cout<<buf;
+		}
+		//std::cout<<buf;
 	}
 
 private:

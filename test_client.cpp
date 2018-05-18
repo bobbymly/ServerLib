@@ -144,10 +144,10 @@ int main(int argc, char* argv[]) {
     for(int i=0;i<10;++i)
         write(sockfd,buf,sizeof buf);
     printf("write finished\n");
-    int len = recv(sockfd, buf, sizeof(buf), 0);
-    if (len >= 0) {
-        buf[len] = '\0';
-    }
+    //int len = recv(sockfd, buf, sizeof(buf), 0);
+    // if (len >= 0) {
+    //     buf[len] = '\0';
+    // }
     
     printf("RECV: %s\n", buf);
 
