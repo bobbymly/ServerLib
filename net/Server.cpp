@@ -37,13 +37,18 @@ void Server::start()
 	started_=true;
 }
 
-// void temp_fuc()
-// {
+void temp_fuc(int fd)
+{
 
-// 	char buf[]="hello world";
-// //	write(fd,buf,sizeof buf);
-// 	std::cout<<buf;
-// }
+	char buf[1024];
+	int n;
+	n=write(fd,buf,sizeof buf);
+	while(n)
+	{
+		n=write(fd,buf,sizeof buf);	
+	}
+	std::cout<<buf;
+}
 
 
 void Server::handNewConn()
@@ -76,10 +81,11 @@ void Server::handNewConn()
 
 
 		shared_ptr<Channel> ch(new Channel(loop,accept_fd));
-		//ch->setEvents(DEFUALT_EVENT);
-		//ch->setReadHandler(std::bind(temp_fuc));
+		ch->setEvents(EPOLLIN|EPOLLHUP|EPOLLET);
+		ch->setReadHandler(std::bind(&Channel::readAll,ch));
+		// ch->set
 		loop->addToPoller(ch);
-
+		//loop_->addToPoller(ch);
 	}
 	acceptChannel_->setEvents(EPOLLIN|EPOLLET);
 }

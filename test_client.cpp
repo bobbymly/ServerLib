@@ -140,10 +140,10 @@ int main(int argc, char* argv[]) {
 
     printf("Connected to %s\n", argv[1]);
     
-    char buf[1024] = "111";
-    
-    write(sockfd,buf,sizeof buf);
-
+    char buf[1024] = "111*";
+    for(int i=0;i<10;++i)
+        write(sockfd,buf,sizeof buf);
+    printf("write finished\n");
     int len = recv(sockfd, buf, sizeof(buf), 0);
     if (len >= 0) {
         buf[len] = '\0';

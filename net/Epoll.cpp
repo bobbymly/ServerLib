@@ -49,6 +49,7 @@ void Epoll::epoll_add(SP_Channel request,int timeout)
 		perror("epoll_add error");
 		fd2chan_[fd].reset();
 	}
+	LOG<<"EPOLL_ADD";
 }
 
 void Epoll::epoll_mod(SP_Channel request,int timeout)

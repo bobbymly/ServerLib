@@ -5,7 +5,9 @@
 #include <sys/epoll.h>
 #include <functional>
 #include <sys/epoll.h>
-
+#include "../base/Logging.h"
+#include <iostream>
+#include <unistd.h>
 class EventLoop;
 
 typedef std::function<void()> CallBack;
@@ -38,24 +40,29 @@ public:
 
 	void handleEvents()
 	{
+		LOG <<"HANDLE EVENT";
 		events_=0;
 		if((revents_&EPOLLHUP)&&!(revents_&EPOLLIN))
 		{
+			LOG <<"IN EVENT";
 			events_=0;
 			return;
 		}
 		if(revents_&EPOLLERR)
 		{
+			LOG <<"ERROR EVENT";
 			if(errorHandler_)errorHandler_();
 			events_=0;
 			return ;
 		}
 		if(revents_&(EPOLLIN|EPOLLPRI|EPOLLRDHUP))
 		{
+			LOG <<"READ EVENT";
 			handleRead();
 		}
 		if(revents_&EPOLLOUT)
 		{
+			LOG <<"WRITE EVENT";
 			handleWrite();
 		}
 		handleConn();
@@ -90,6 +97,20 @@ public:
 		return lastEvents_;
 	}
 
+	void readAll()
+	{
+		std::cout<<"readALL"<<std::endl;
+		char buf[1024];
+		int n;
+		n=read(fd_,buf,sizeof buf);
+		std::cout<<buf;
+		// while(n>0)
+		// {
+		// 	n=read(fd_,buf,sizeof buf);	
+		// 	std::cout<<buf;
+		// }
+		// std::cout<<buf;
+	}
 
 private:
 	
