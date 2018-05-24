@@ -12,7 +12,7 @@ const char* zero=digits+9;
 
 
 template<typename T>
-size_t convert(char buf[],T 	)
+size_t convert(char buf[],T value)
 {
 	T i=value;
 	char *p=buf;
