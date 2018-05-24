@@ -40,13 +40,14 @@ private:
     {
         int fd = ch->getFd();
         char buf[1024];
+        char ans[] = "HTTP/1.1 200 OK\r\n\r\nDate: Sat, 31 Dec 2005 23:59:59 GMT \r\n\r\nContent-Type: text/html;charset=ISO-8859-1\r\n\r\nContent-Length: 122\r\n\r\n<html><head><title>Wrox Homepage</title></head><body><!-- body goes here --></body></html>";
         int n;
         n=read(fd,buf,sizeof buf);
         //std::cout<<"here"<<buf;
         while(n>0)
         {
             std::cout<<"Echo message : "<<buf;
-            write(fd,buf,strlen(buf));
+            write(fd,ans,sizeof ans);
             n=read(fd,buf,sizeof buf);
         }
         if(n == 0)LOG<<"socket closed";
