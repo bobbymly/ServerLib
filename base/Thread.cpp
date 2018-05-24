@@ -72,7 +72,7 @@ void *startThread(void *obj)
 	ThreadData* data=static_cast<ThreadData*>(obj);
 	data->runInThread();
 	delete data;
-	return NULL;
+		return NULL;
 }
 
 Thread::Thread(const ThreadFunc &func,const string &n):
@@ -93,6 +93,7 @@ Thread::~Thread()
 	if(started_&&!joined_)
 		pthread_detach(pthreadId_);		//防止产生僵尸线程
 }
+		
 
 void Thread::setDefaultName()
 {
@@ -119,6 +120,8 @@ void Thread::start()
 		assert(tid_>0);
 	}
 }
+
+
 
 int Thread::join()
 {

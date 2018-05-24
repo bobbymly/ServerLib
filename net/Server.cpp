@@ -82,7 +82,11 @@ void Server::handNewConn()
 
 		shared_ptr<Channel> ch(new Channel(loop,accept_fd));
 		ch->setEvents(EPOLLIN|EPOLLHUP|EPOLLET|EPOLLRDHUP);
-		ch->setReadHandler(std::bind(&Channel::readAll,ch));
+		//ch->setReadHandler(std::bind(&Channel::readAll,ch));
+		ch->setReadHandler(std::bind(readCallback_,ch));
+		ch->setWriteHandler(std::bind(writeCallback_,ch));
+		ch->setErrorHandler(std::bind(errorCallback_,ch));
+		//ch->setCloseHandler()
 		loop->addToPoller(ch);
 		//loop_->addToPoller(ch);
 	}

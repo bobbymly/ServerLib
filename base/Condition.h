@@ -41,7 +41,7 @@ public:
 		clock_gettime(CLOCK_REALTIME, &abstime);
 		abstime.tv_sec += static_cast<time_t>(seconds);
 		return ETIMEDOUT == pthread_cond_timedwait(&cond,mutex.get(),&abstime);
-	}
+	}	
 
 
 private:

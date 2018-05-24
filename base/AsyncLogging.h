@@ -7,7 +7,7 @@
 #include <functional>
 #include <string>
 #include <vector>
-extern kLargeBuffer;
+
 class AsyncLogging:noncopyable
 {
 public:

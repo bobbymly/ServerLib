@@ -28,7 +28,7 @@ size_t convert(char buf[],T 	)
 	}
 	*p='\0';
 	std::reverse(buf,p);
-	return static_cast<int>(p-buf);
+	return p-buf;
 }
 
 

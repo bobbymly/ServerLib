@@ -68,7 +68,7 @@ public:
 		events_=0;
 		std::cout<<eventsToString(revents_)<<std::endl;
 		LOG <<eventsToString(revents_);
-		if((revents_&EPOLLRDHUP)&&!(revents_&EPOLLIN))
+		if((revents_&EPOLLRDHUP)&&(revents_&EPOLLIN))
 		{
 			LOG <<"CLOSE EVENT";
 			//removeFrom
