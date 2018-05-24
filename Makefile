@@ -1,12 +1,12 @@
 # MAINSOURCE代表含有main入口函数的cpp文件
-MAINSOURCE := LogTest.cpp
-SOURCE  := $(wildcard *.cpp base/*.cpp tests/*.cpp)
+MAINSOURCE :=  ServerTest.cpp
+SOURCE  := $(wildcard  base/*.cpp  tests/*.cpp net/*.cpp )
 override SOURCE := $(filter-out $(MAINSOURCE),$(SOURCE))
 OBJS    := $(patsubst %.cpp,%.o,$(SOURCE))
 
-TARGET  := LogTest
+TARGET  :=  ServerTest
 CC      := g++
-LIBS    := -lpthread 
+LIBS    := -lpthread -lrt 
 INCLUDE:= -I./usr/local/lib
 CFLAGS  := -std=c++11 -g -Wall -O3 -D_PTHREADS
 CXXFLAGS:= $(CFLAGS)
@@ -23,7 +23,7 @@ clean:
 debug:
 	@echo $(SOURCE)
 
-$(TARGET) : $(OBJS) LogTest.o
+$(TARGET) : $(OBJS) ServerTest.o
 	$(CC) $(CXXFLAGS) -o $@ $^ $(LDFLAGS) $(LIBS)
 # $@代表目标，这里是$(TARGET)
 
