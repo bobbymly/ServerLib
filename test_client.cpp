@@ -26,10 +26,11 @@ int main(int argc, char* argv[]) {
     printf("Connected to %s\n", argv[1]);
     
     char buf[1024] = " hello world!\n";
-    for(int i=0;i<10;++i)
+    for(int i=0;i<100;++i)
     {
         buf[0] = i + '0';
         write(sockfd,buf,sizeof buf);
+        sleep(1);
     }
         
     printf("write finished\n");
@@ -40,14 +41,14 @@ int main(int argc, char* argv[]) {
     
     //printf("RECV: %s\n", buf);
 
-    sleep(5);
+    // sleep(5);
 
-    for(int i=0;i<10;++i)
-    {
-        buf[0] = i + '0';
-        write(sockfd,buf,sizeof buf);
-    }
-    sleep(10);
+    // for(int i=0;i<10;++i)
+    // {
+    //     buf[0] = i + '0';
+    //     write(sockfd,buf,sizeof buf);
+    // }
+    // sleep(10);
     socket_deinit(sockfd);
     return 0;
 }

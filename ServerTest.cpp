@@ -43,14 +43,13 @@ private:
         int n;
         n=read(fd,buf,sizeof buf);
         //std::cout<<"here"<<buf;
-        while(n != -1)
+        while(n>0)
         {
             std::cout<<"Echo message : "<<buf;
             write(fd,buf,strlen(buf));
             n=read(fd,buf,sizeof buf);
-            
-    
         }
+        if(n == 0)LOG<<"socket closed";
     }
    
 };
