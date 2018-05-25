@@ -15,7 +15,6 @@ size_t AppendFile::write(const char* logline,size_t len)
 	return fwrite_unlocked(logline,1,len,fp_);
 }
 
-
 AppendFile::AppendFile(string filename):
 	fp_(fopen(filename.c_str(),"ae"))
 {

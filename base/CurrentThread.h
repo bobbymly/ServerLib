@@ -9,7 +9,6 @@ namespace CurrentThread
 	extern __thread const char* t_threadName;
 	void cacheTid();
 
-
 	inline int tid()
 	{
 		if(t_cachedTid==0)cacheTid();

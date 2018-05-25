@@ -122,7 +122,6 @@ void Thread::start()
 }
 
 
-
 int Thread::join()
 {
 	assert(started_);

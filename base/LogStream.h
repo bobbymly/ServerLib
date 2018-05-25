@@ -41,7 +41,6 @@ private:
 
 
 
-
 //重载一系列 << 运算符
 class LogStream:noncopyable
 {

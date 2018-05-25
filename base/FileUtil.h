@@ -11,6 +11,7 @@ public:
 	void append(const char *logline,const size_t len);
 	void flush();
 
+
 private:
 	size_t write(const char *logline,size_t len);
 	FILE* fp_;

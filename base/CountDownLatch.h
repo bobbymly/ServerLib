@@ -3,6 +3,7 @@
 #include "MutexLock.h"
 #include "Condition.h"
 
+
 class CountDownLatch: noncopyable
 {
 public:

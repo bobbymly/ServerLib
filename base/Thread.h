@@ -30,6 +30,4 @@ private:
 	std::string name_;
 	CountDownLatch latch_;
 
-
-
 };

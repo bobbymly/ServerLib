@@ -77,7 +77,6 @@ void AsyncLogging::threadFunc()
 		assert(newBuffer1&&newBuffer1->length()==0);
 		assert(newBuffer2&&newBuffer2->length()==0);
 		assert(buffersToWrite.empty());
-
 		{
 			MutexLockGuard lock(mutex_);
 			if(buffers_.empty())

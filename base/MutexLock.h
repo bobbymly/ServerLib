@@ -33,6 +33,7 @@ private:
 	friend class Condition;
 };
 
+
 class MutexLockGuard: noncopyable
 {
 public:

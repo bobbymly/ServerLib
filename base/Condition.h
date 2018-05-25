@@ -43,7 +43,6 @@ public:
 		return ETIMEDOUT == pthread_cond_timedwait(&cond,mutex.get(),&abstime);
 	}	
 
-
 private:
 	MutexLock &mutex;
 	pthread_cond_t cond;

@@ -33,6 +33,4 @@ private:
 	BufferPtr nextBuffer_;
 	BufferVector buffers_;
 	CountDownLatch latch_;
-
-
 };

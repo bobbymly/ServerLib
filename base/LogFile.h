@@ -15,7 +15,6 @@ public:
 	void flush();
 	bool rollFile();
 	
-
 private:
 	int count_;
 	std::unique_ptr<MutexLock> mutex_;
