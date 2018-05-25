@@ -1,13 +1,13 @@
 # ServerLib
 C++ Library for server
 ## 项目简介
-用 C++11 编写的 Linux 平台上的轻量级多线程网络库
+用 C++ 编写的 Linux 平台上的轻量级多线程网络库
+* 采用 Reactor 模型
+* 多线程提高并发性，使用线程池避免线程频繁创建销毁的开销
+* 使用 epoll 多路复用
+* 实现高效的多线程异步日志降低日志I/O开销
 ## 项目结构
-* 采用 Reactor 设计模式
 ![](https://github.com/bobbymly/Serverlib/raw/master/pic/show.png)
- 
- 
-
 
 ## fd 管理
 * Channel 类： 负责一个 fd 的事件，包含 fd 和 fd 事件的各种回调函数
