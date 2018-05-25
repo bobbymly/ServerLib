@@ -65,7 +65,7 @@ public:
 	{
 		LOG <<"HANDLE EVENT";
 		events_=0;
-		std::cout<<eventsToString(revents_)<<std::endl;
+		//std::cout<<eventsToString(revents_)<<std::endl;
 		LOG <<eventsToString(revents_);
 		if((revents_&EPOLLRDHUP)&&(revents_&EPOLLIN))
 		{
@@ -123,20 +123,7 @@ public:
 		return lastEvents_;
 	}
 
-	void readAll()
-	{
-		//std::cout<<"readALL"<<std::endl;
-		char buf[1024];
-		int n;
-		n=read(fd_,buf,sizeof buf);
-		std::cout<<buf;
-		while(n>0)
-		{
-			n=read(fd_,buf,sizeof buf);	
-			std::cout<<buf;
-		}
-		//std::cout<<buf;
-	}
+
 
 private:
 	
