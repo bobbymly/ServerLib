@@ -35,8 +35,7 @@ void Epoll::epoll_add(SP_Channel request,int timeout)
 	int fd=request->getFd();
 	if(timeout>0)
 	{
-		//add_timer(request,timeout);
-		//fd2http_[fd]=request->getHolder();
+		//
 	}
 	struct epoll_event event;
 	event.data.fd=fd;
@@ -54,7 +53,7 @@ void Epoll::epoll_add(SP_Channel request,int timeout)
 
 void Epoll::epoll_mod(SP_Channel request,int timeout)
 {
-	if(timeout>0)
+	//if(timeout>0)
 		//add_timer(request,timeout);
 	//int  fd=request->getFd();
 	if(!request->EqualAndUpdateLastEvents())
@@ -84,12 +83,11 @@ void Epoll::epoll_del(SP_Channel request)
 		perror("epoll_del error");
 	}
 	fd2chan_[fd].reset();
-	//fd2http_[fd].reset();
 }
 
 void Epoll::handleExpired()
 {
-	//timerManager_.handleExpiredEvent();
+
 }
 
 
@@ -127,12 +125,3 @@ std::vector<SP_Channel> Epoll::getEventsRequest(int events_nums)
 	}
 	return req_data;
 }
-
-// void Epoll::add_timer(SP_Channel request_data,int timeout)
-// {
-// 	//shared_ptr<HttpData> t=request_data->getHolder();
-// 	if(t)
-// 		//timerManager_.addTimer(t,timeout);
-// 	else
-// 		LOG<<"timer add fail";
-// }

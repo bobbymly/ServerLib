@@ -16,7 +16,6 @@ public:
 	void epoll_del(SP_Channel request);
 	std::vector<std::shared_ptr<Channel> > poll();
 	std::vector<std::shared_ptr<Channel> > getEventsRequest(int events_num);
-	//void add_timer(std::shared_ptr<Channel> request_data,int timeout);
 	int getEpollFd()
 	{
 		return epollFd_;
@@ -28,7 +27,6 @@ private:
 	int epollFd_;
 	std::vector<epoll_event> events_;
 	std::shared_ptr<Channel> fd2chan_[MAXFDS];
-	//TimerManager timerManager_;
 
 
 };

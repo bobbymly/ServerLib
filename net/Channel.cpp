@@ -23,7 +23,6 @@ Channel::Channel(EventLoop *loop,int fd):
 
 Channel::~Channel()
 {
-	//loop_->poller_->epoll_del(fd_, events_);
     close(fd_);
 }
 

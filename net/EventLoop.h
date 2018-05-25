@@ -65,5 +65,4 @@ private:
 	void handleRead();
 	void doPendingFunctors();
 	void handleConn();
-
 };

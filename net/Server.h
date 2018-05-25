@@ -37,7 +37,6 @@ private:
 	CallBackWithCh errorCallback_;
 	//Callback closeCallback_; 
 
-
 	EventLoop *loop_;
 	int threadNum_;
 	std::unique_ptr<EventLoopThreadPool> eventLoopThreadPool_;

@@ -45,7 +45,6 @@ void addChToLoop(shared_ptr<Channel> ch,EventLoop* loop)
 
 void Server::handNewConn()
 {
-	//cout<<"here"<<endl;
 	struct sockaddr_in client_addr;
 	memset(&client_addr,0,sizeof(struct sockaddr_in));
 	socklen_t client_addr_len=sizeof(client_addr);

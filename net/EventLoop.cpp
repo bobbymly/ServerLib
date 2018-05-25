@@ -19,7 +19,6 @@ int createEventfd()
 	return evtfd;
 }
 
-
 EventLoop::EventLoop():
 	looping_(false),
 	poller_(new Epoll()),

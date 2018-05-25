@@ -10,7 +10,6 @@ EventLoopThread::EventLoopThread():
 	cond_(mutex_)
 {	}
 
-
 EventLoopThread::~EventLoopThread()
 {
 	exiting_=true;

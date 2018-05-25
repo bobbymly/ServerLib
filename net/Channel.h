@@ -56,8 +56,7 @@ public:
 			oss << "RDHUP ";
 		if (ev & EPOLLERR)
 			oss << "ERR ";
-		// if (ev & EPOLLNVAL)
-		// 	oss << "NVAL ";
+
 
 		return oss.str().c_str();
 	}
@@ -71,7 +70,6 @@ public:
 		if((revents_&EPOLLRDHUP)&&(revents_&EPOLLIN))
 		{
 			LOG <<"CLOSE EVENT";
-			//removeFrom
 			events_=0;
 			return;
 		}
