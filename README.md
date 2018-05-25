@@ -13,8 +13,25 @@ C++ Library for server
 * Channel 类： 负责一个 fd 的事件，包含 fd 和 fd 事件的各种回调函数
 * EventLoop 类： 每一个线程包含一个 EventLoop 对象，对 IO 线程（即 SubReactor）而言，每个EventLoop包含一个 Epoll ,管理多个 fd,即关联多个Channel,作为一个时间循环处理Epoll中的活跃事件。
 
+## 多线程管理
+* EventLoop : EventLoop 包含一个 Epoll， EventLoop 的核心一个 while 循环,循环处理事件。
+* EventLoopThread : 包含一个 EventLoop , 封装了其在线程池中的创建销毁同步等线程相关操作。
+* EventLoopThreadPool : 线程池，负责创建和维护线程池中的线程，向线程池中的线程分配任务。
+
+
+ ## 基础设施
+ * 互斥器 ：实现了用 RAII 手法封装的 MutexLock 和 MutexLockGuard
+ * 条件变量 :封装了Condition 和 CountDownLatch 用以保证线程间同步
+ * Epoll ：对 epoll 的封装
+ 
+ ## 网络（进展中）
+ * Server ：用于编写网络服务器，接受客户连接，封装繁杂的函数
+ * Util ： 包含对的 socket 的读写和设置等操作。 
+ 
 
 ## Log 实现
+  详细设计：https://github.com/bobbymly/uy_log
+  
   由于在多线程环境下频繁的文件读写会造成很大的性能损失，故采用双缓冲区设计。
   
   预先准备两个缓冲区 A B ,由各个产生 Log 信息的线程 向 A 缓冲区写入， 当 A 写满后 交换 A B 缓冲区(使用 std::move)移动语义避免内存拷贝造成的性能损失。而由 Log 线程向 Log 文件中写入 Log 信息。这样，零散而频繁的文件读写，变成了先收集齐一定的量的Log信息在一次性写入。这样也就只有一个线程需要向文件进行写操作，既降低了操作频率，同时也可以使用无锁操作写文件，提高了效率。
@@ -29,23 +46,6 @@ C++ Library for server
   * Logging 对外的接口，内涵一个LogStream对象，在每次打Log时为其添加 文件名 和 行数 等格式化信息。
   
   
- 
- ## 计算线程（进展中）
- * 预先启动一个线程池用作计算
- * 使用一个任务队列，当需要计算任务是，添加到任务队列中，线程池中的线程从任务队列中区任务执行
- 
- ## 基础设施
- * 互斥器 ：实现了用 RAII 手法封装的 MutexLock 和 MutexLockGuard
- * 条件变量 :封装了Condition 和 CountDownLatch 用以保证线程间同步
- * Epoll ：对 epoll 的封装
- * 定时器 （计划中）：预定使用 timerfd 实现
- 
- ## 网络（进展中）
- * InetAddress :封装 IP 地址及各种操作
- * Socket/SocketsOps :封装对 Socket 的操作 
- * Server ：用于编写网络服务器，接受客户连接，封装繁杂的函数
- * Client ：用于编写网络客户端，发起连接
- 
  
  
  
