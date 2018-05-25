@@ -25,15 +25,19 @@ int main(int argc, char* argv[]) {
 
     printf("Connected to %s\n", argv[1]);
     
-    char buf[1024] = " hello world!\n";
-    for(int i=0;i<100;++i)
-    {
-        buf[0] = i + '0';
-        write(sockfd,buf,sizeof buf);
-        sleep(1);
-    }
-        
+    char buf[1024] = "GET / HTTP/1.1\r\n\r\n";
+    // for(int i=0;i<100;++i)
+    // {
+    //     buf[0] = i + '0';
+    //     write(sockfd,buf,sizeof buf);
+    // }
+    write(sockfd,buf,sizeof buf);
+    read(sockfd,buf,sizeof buf);
+    printf("%s",buf);    
     printf("write finished\n");
+
+//200 / OK
+
     //int len = recv(sockfd, buf, sizeof(buf), 0);
     // if (len >= 0) {
     //     buf[len] = '\0';

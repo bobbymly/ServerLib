@@ -39,8 +39,13 @@ private:
     void readCallback(shared_ptr<Channel> ch)
     {
         int fd = ch->getFd();
-        char buf[1024];
-        char ans[] = "HTTP/1.1 200 OK\r\n\r\nDate: Sat, 31 Dec 2005 23:59:59 GMT \r\n\r\nContent-Type: text/html;charset=ISO-8859-1\r\n\r\nContent-Length: 122\r\n\r\n<html><head><title>Wrox Homepage</title></head><body><!-- body goes here --></body></html>";
+        char buf[10024];
+        //char ans[] = "HTTP/1.1 200 OK\r\n";
+        //HTTP/1.1 200 OK
+        char ans[] = "HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=koi8-r\r\nContent-Length: 175\r\nAccept-Ranges: bytes\r\n\r\n<html><head><title>Welcome!</title><style>body {width: 35em;margin: 0 auto;font-family: Tahoma, Verdana, Arial, sans-serif;}</style></head><body><h1>Welcome</h1></body></html>";
+//<!DOCTYPE html>
+       
+       
         int n;
         n=read(fd,buf,sizeof buf);
         //std::cout<<"here"<<buf;
