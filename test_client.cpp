@@ -8,6 +8,7 @@
 #include <netinet/in.h>  
 #include <fcntl.h>
 #include <strings.h>
+#include <string.h>
 
 int socket_init();
 void socket_deinit(int);
@@ -25,13 +26,13 @@ int main(int argc, char* argv[]) {
 
     printf("Connected to %s\n", argv[1]);
     
-    char buf[1024] = "GET / HTTP/1.1\r\n\r\n";
+    char buf[1024] = "GET / HTTP/1.1";
     // for(int i=0;i<100;++i)
     // {
     //     buf[0] = i + '0';
     //     write(sockfd,buf,sizeof buf);
     // }
-    write(sockfd,buf,sizeof buf);
+    write(sockfd,buf,strlen( buf)+1);
     read(sockfd,buf,sizeof buf);
     printf("%s",buf);    
     printf("write finished\n");
@@ -54,6 +55,7 @@ int main(int argc, char* argv[]) {
     // }
     // sleep(10);
     socket_deinit(sockfd);
+    sleep(3);
     return 0;
 }
 

@@ -37,19 +37,11 @@ void Server::start()
 	started_=true;
 }
 
-void temp_fuc(int fd)
+void addChToLoop(shared_ptr<Channel> ch,EventLoop* loop)
 {
-
-	char buf[1024];
-	int n;
-	n=write(fd,buf,sizeof buf);
-	while(n)
-	{
-		n=write(fd,buf,sizeof buf);	
-	}
-	std::cout<<buf;
+	ch->setEvents(EPOLLIN | EPOLLET | EPOLLONESHOT| EPOLLHUP|EPOLLRDHUP);
+	loop -> addToPoller(ch);
 }
-
 
 void Server::handNewConn()
 {
@@ -81,15 +73,26 @@ void Server::handNewConn()
 
 
 		shared_ptr<Channel> ch(new Channel(loop,accept_fd));
-		ch->setEvents(EPOLLIN|EPOLLHUP|EPOLLET|EPOLLRDHUP);
+	//	ch->setEvents(EPOLLIN|EPOLLHUP|EPOLLRDHUP);
 		//ch->setReadHandler(std::bind(&Channel::readAll,ch));
 		ch->setReadHandler(std::bind(readCallback_,ch));
 		ch->setWriteHandler(std::bind(writeCallback_,ch));
 		ch->setErrorHandler(std::bind(errorCallback_,ch));
 		//ch->setCloseHandler()
-		loop->addToPoller(ch);
-		//loop_->addToPoller(ch);
+		ch->setEvents(EPOLLIN | EPOLLET | EPOLLHUP|EPOLLRDHUP);
+
+		//loop->queueInLoop(std::bind(addChToLoop,ch,loop));
+		//loop->addToPoller(ch);
+		loop_->addToPoller(ch);
 	}
 	acceptChannel_->setEvents(EPOLLIN|EPOLLET);
 }
 
+
+
+
+// void HttpData::newEvent()
+// {
+//     channel_->setEvents(DEFAULT_EVENT);
+//     loop_->addToPoller(channel_, DEFAULT_EXPIRED_TIME);
+// }

@@ -17,17 +17,17 @@ public:
 	void handNewConn();
 	void handThisConn(){	loop_->updatePoller(acceptChannel_);}
 
-	void setReadCallback(CallBackWithCh & cb )
+	void setReadCallback(CallBackWithCh  cb )
 	{
 		readCallback_ = cb;
 	}
 	//void setCloseCallback();
-	void setWriteCallback(CallBackWithCh & cb )
+	void setWriteCallback(CallBackWithCh  cb )
 	{
 		writeCallback_ = cb;
 	}
 	
-	void setErrorCallback(CallBackWithCh & cb )
+	void setErrorCallback(CallBackWithCh  cb )
 	{
 		errorCallback_ = cb;
 	}

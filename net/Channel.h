@@ -64,7 +64,7 @@ public:
 
 	void handleEvents()
 	{
-		//LOG <<"HANDLE EVENT";
+		LOG <<"HANDLE EVENT";
 		events_=0;
 		std::cout<<eventsToString(revents_)<<std::endl;
 		LOG <<eventsToString(revents_);
@@ -92,6 +92,7 @@ public:
 			LOG <<"WRITE EVENT";
 			handleWrite();
 		}
+		events_=0;
 		handleConn();
 	}
 
