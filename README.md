@@ -11,10 +11,9 @@ C++ Library for server
 
 ## fd 管理
 * Channel 类： 负责一个 fd 的事件，包含 fd 和 fd 事件的各种回调函数
-* EventLoop 类： 每一个线程包含一个 EventLoop 对象，对 IO 线程（即 SubReactor）而言，每个EventLoop包含一个 Epoll ,管理多个 fd,即关联多个Channel,作为一个时间循环处理Epoll中的活跃事件。
+* EventLoop 类： 每一个线程包含一个 EventLoop 对象，对 IO 线程（即 SubReactor）而言，每个EventLoop包含一个 Epoll ,管理多个 fd,即关联多个Channel,作为一个时间循环处理Epoll中的活跃事件，EventLoop 的核心一个 while 循环,循环处理事件。
 
 ## 多线程管理
-* EventLoop : EventLoop 包含一个 Epoll， EventLoop 的核心一个 while 循环,循环处理事件。
 * EventLoopThread : 包含一个 EventLoop , 封装了其在线程池中的创建销毁同步等线程相关操作。
 * EventLoopThreadPool : 线程池，负责创建和维护线程池中的线程，向线程池中的线程分配任务。
 
@@ -24,7 +23,7 @@ C++ Library for server
  * 条件变量 :封装了Condition 和 CountDownLatch 用以保证线程间同步
  * Epoll ：对 epoll 的封装
  
- ## 网络（进展中）
+ ## 网络
  * Server ：用于编写网络服务器，接受客户连接，封装繁杂的函数
  * Util ： 包含对的 socket 的读写和设置等操作。 
  
@@ -45,13 +44,3 @@ C++ Library for server
   * LogStream 重载各种<<运算符
   * Logging 对外的接口，内涵一个LogStream对象，在每次打Log时为其添加 文件名 和 行数 等格式化信息。
   
-  
- 
- 
- 
- 
- 
- 
- 
- 
- 
