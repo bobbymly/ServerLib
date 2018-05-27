@@ -17,7 +17,7 @@ C++ Library for server
 ## 使用说明
 > 1. 声明一个 EventLoop
 > ```
-> EventLoop loop;
+> EventLoop loop_;
 > ```
 >  2. 声明一个 Server ,并为其指定对应的 EventLoop ， 线程池的线程数， 监听端口
 > ```
