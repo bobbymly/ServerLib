@@ -21,11 +21,11 @@ void readCallback(shared_ptr<Channel> ch)
 
 
 
-class EchoServer
+class TestServer
 {
 public:
 
-    EchoServer(EventLoop* loop,int threadNum,int port):
+    TestServer(EventLoop* loop,int threadNum,int port):
         myServer_(loop,threadNum,port)
     {
         myServer_.setReadCallback(readCallback);
@@ -43,7 +43,7 @@ private:
 int main()
 {
     EventLoop loop_;
-    EchoServer myServer_(&loop_,4,80);
+    TestServer myServer_(&loop_,4,80);
     myServer_.start();
     loop_.loop();
     sleep(30);
