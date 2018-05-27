@@ -4,9 +4,10 @@ C++ Library for server
 用 C++ 编写的 Linux 平台上的轻量级多线程网络库
 * 多线程提高并发性，使用线程池避免线程频繁创建销毁的开销
 * 采用 Reactor 模型，主线程负责Accept,把连接并以Round Robin的方式分发给线程池中线程
-
 * 使用 epoll 边缘触发IO多路复用
 * 实现高效的多线程异步日志降低日志I/O开销
+* 事件回调等接口均使用 std::function + std::bind ,无需使用虚函数体系
+* 该项目目前只实现了基础网络框架，后续将为其添加 HTTP
 ## 项目结构
 ![](https://github.com/bobbymly/ServerLib/blob/master/pic/show.png?raw=true)
 
