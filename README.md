@@ -28,7 +28,7 @@ C++ Library for server
 > void readCallback(shared_ptr<Channel> ch){ …… };
 > void writeCallback(shared_ptr<Channel> ch){ …… };
 > myServer_.setReadCallback(readCallback);
-> myServer_.setReadCallback(writeCallback);
+> myServer_.setWriteCallback(writeCallback);
 > ```
 > 4. 启动 Server
 > ```
