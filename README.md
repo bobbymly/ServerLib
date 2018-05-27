@@ -9,6 +9,11 @@ C++ Library for server
 * 事件回调等接口均使用 std::function + std::bind ,无需使用虚函数体系
 * 该项目目前只实现了基础网络框架，根据需要可为 Server 绑定对应的回调函数以应对不同的需求，后续将为其添加 HTTP 等常用应用层模块。
 
+
+
+## 项目结构
+![](https://github.com/bobbymly/ServerLib/blob/master/pic/show.png?raw=true)
+
 ## 使用说明
 > 1. 声明一个 EventLoop
 > ```
@@ -33,8 +38,6 @@ C++ Library for server
 
 
 
-## 项目结构
-![](https://github.com/bobbymly/ServerLib/blob/master/pic/show.png?raw=true)
 
 
 
