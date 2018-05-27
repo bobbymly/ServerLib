@@ -7,9 +7,36 @@ C++ Library for server
 * 使用 epoll 边缘触发IO多路复用
 * 实现高效的多线程异步日志降低日志I/O开销
 * 事件回调等接口均使用 std::function + std::bind ,无需使用虚函数体系
-* 该项目目前只实现了基础网络框架，后续将为其添加 HTTP
+* 该项目目前只实现了基础网络框架，根据需要可为 Server 绑定对应的回调函数以应对不同的需求，后续将为其添加 HTTP 等常用应用层模块。
+
+## 使用说明
+> 1. 声明一个 EventLoop
+> ```
+> EventLoop loop;
+> ```
+>  2. 声明一个 Server ,并为其指定对应的 EventLoop ， 线程池的线程数， 监听端口
+> ```
+> Server myServer_(&loop_,4,80);
+> ```
+> 3. 为 Server 设置对应的各种事件回调
+> ```
+> void readCallback(shared_ptr<Channel> ch){ …… };
+> void writeCallback(shared_ptr<Channel> ch){ …… };
+> myServer_.setReadCallback(readCallback);
+> myServer_.setReadCallback(writeCallback);
+> ```
+> 4. 启动 Server
+> ```
+> myServer_.start();
+> loop_.loop();
+> ```
+
+
+
 ## 项目结构
 ![](https://github.com/bobbymly/ServerLib/blob/master/pic/show.png?raw=true)
+
+
 
 ## fd 管理
 * Channel 类： 负责一个 fd 的事件，包含 fd 和 fd 事件的各种回调函数
