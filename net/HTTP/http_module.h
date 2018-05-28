@@ -1,7 +1,8 @@
-#include "..../base/Logging.h"
-#include "..../base/FixedBuffer.h"
+#include "../../base/Logging.h"
+//#include "../../base/FixedBuffer.h"
 #include <iostream>
 #include <string>
+#include <map>
 using namespace std;
 
 
@@ -34,14 +35,14 @@ void setPath(const char* begin,const char* end)
 void setQuery(const char* begin,const char* end)
 {   query_.assign(begin,end);}
 
-void http_module::setBody(const char* begin,const char* end)
+void setBody(const char* begin,const char* end)
 {
     body_.assign(begin,end);
 }
 void setVersion(Version v)
 {   version_ = v;}
 bool processRequestLine(const char* begin, const char* end);
-
+bool parseHeaders(const char* begin,const char* end);
 
 bool parseRequest();
 
@@ -73,4 +74,4 @@ private:
     string query_;
     string body_;
     map <string,string> headers_;
-}
+};

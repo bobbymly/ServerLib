@@ -13,19 +13,19 @@ bool http_module::setMethod(const char* begin,const char* end)
     return method_ != DEFUALT;
 }
 
-bool http_module::setPath(const char* begin,const char* end)
+
 
 //请求行解析
 bool http_module::processRequestLine(const char* begin,const char* end)
 {
     if(processSucceed)return true;
     const char* start = begin;
-    const char* space = std::find(start,end," ");
+    const char* space = std::find(start,end,' ');
     if(space != end && setMethod(start,end))
     {
         ++start;
-        space =std::find(start,end," ");
-        const char* question std::find(start,space,"?");
+        space =std::find(start,end,' ');
+        const char* question std::find(start,space,'?');
         setPath(start,question);
         if(question != space)setQuery(question,space);
         ++start;
@@ -57,8 +57,8 @@ bool http_module::parseHeaders(const char* begin,const char* end)
     const char* equel_s;
     while(start < end)
     {
-        step = std::equel(start,end,"/r/n");
-        equel_s = std::find(start,end,"=");
+        step = std::equel(start,end,"\r\n");
+        equel_s = std::find(start,end,'=');
         headers[string(start,equel_s)] = string(equel_s + 1,step);
         start = step + 2;
     }
@@ -69,12 +69,13 @@ bool http_module::parseHeaders(const char* begin,const char* end)
 
 bool http_module::parseRequest()
 {
-    const char* start = buf_.begin();
-    const char* request_line_end = buf_.find("/r/n");
-    processRequestLine(begin,request_line_end);
+    const char* start = buf_.data();
+    const char* request_line_end = buf_.find("\r\n");
+    processRequestLine(start,request_line_end);
     //start += 2;
-    const char* headers_end = std::find(buf_.begin(),buf_.end(),"/r/n/r/n");
+    const char* headers_end = std::find(buf_.data(),buf_.end(),"\r\n\r\n");
     parseHeaders(request_line_end + 2,headers_end);
-    setBody(headers_end + 2,buf_.end());
+    setBody(headers_end + 2,buf_.data() + buf_.length());
+
     return true;
 }
