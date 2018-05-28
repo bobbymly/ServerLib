@@ -1,7 +1,8 @@
 #include "..../base/Logging.h"
 #include "..../base/FixedBuffer.h"
-
+#include <iostream>
 #include <string>
+using namespace std;
 
 
 
@@ -32,6 +33,11 @@ void setPath(const char* begin,const char* end)
 
 void setQuery(const char* begin,const char* end)
 {   query_.assign(begin,end);}
+
+void http_module::setBody(const char* begin,const char* end)
+{
+    body_.assign(begin,end);
+}
 void setVersion(Version v)
 {   version_ = v;}
 bool processRequestLine(const char* begin, const char* end);
@@ -39,6 +45,19 @@ bool processRequestLine(const char* begin, const char* end);
 
 bool parseRequest();
 
+void showDetail()
+{
+    cout<<"Version:"<<version_<<endl;
+    cout<<"Method:"<<method_<<endl;
+    cout<<"Path:"<<path_<<endl;
+    cout<<"Headers:"<<endl;
+    for(auto it = headers_.begin();it != headers_.end();it ++)
+    {
+        cout<<it->first<<":"<<it->second<<endl;
+    }
+    cout<<"Body:"<<endl;
+    cout<<body_<<endl;
+}
 
 
 
@@ -52,4 +71,6 @@ private:
     bool processSucceed;
     string path_;
     string query_;
+    string body_;
+    map <string,string> headers_;
 }

@@ -1,5 +1,5 @@
 #include "http_module.h"
-
+using std::string;
 
 
 bool http_module::setMethod(const char* begin,const char* end)
@@ -50,11 +50,31 @@ bool http_module::processRequestLine(const char* begin,const char* end)
     return processSucceed = true;
 }
 
+bool http_module::parseHeaders(const char* begin,const char* end)
+{
+    const char* start = begin;
+    const char* step;
+    const char* equel_s;
+    while(start < end)
+    {
+        step = std::equel(start,end,"/r/n");
+        equel_s = std::find(start,end,"=");
+        headers[string(start,equel_s)] = string(equel_s + 1,step);
+        start = step + 2;
+    }
+    return true;
+}
+
+
+
 bool http_module::parseRequest()
 {
     const char* start = buf_.begin();
-    const char* end = buf_.find("/r/n",start - buf_.begin);
-    processRequestLine(begin,end);
-
-
+    const char* request_line_end = buf_.find("/r/n");
+    processRequestLine(begin,request_line_end);
+    //start += 2;
+    const char* headers_end = std::find(buf_.begin(),buf_.end(),"/r/n/r/n");
+    parseHeaders(request_line_end + 2,headers_end);
+    setBody(headers_end + 2,buf_.end());
+    return true;
 }
