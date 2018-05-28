@@ -2,19 +2,52 @@
 C++ Library for server
 ## 项目简介
 用 C++ 编写的 Linux 平台上的轻量级多线程网络库
-* 采用 Reactor 模型
 * 多线程提高并发性，使用线程池避免线程频繁创建销毁的开销
-* 使用 epoll 多路复用
+* 采用 Reactor 模型，主线程负责Accept,把连接以Round Robin的方式分发给线程池中线程
+* 使用 epoll 边缘触发IO多路复用
 * 实现高效的多线程异步日志降低日志I/O开销
+* 事件回调等接口均使用 std::function + std::bind ,无需使用虚函数体系
+* 该项目目前只实现了基础网络框架，根据需要可为 Server 绑定对应的回调函数以应对不同的需求，后续将为其添加 HTTP 等常用应用层模块。
+
+
+
 ## 项目结构
-![](https://github.com/bobbymly/Serverlib/raw/master/pic/show.png)
+![](https://github.com/bobbymly/ServerLib/blob/master/pic/show.png?raw=true)
+
+## 使用说明
+> 1. 声明一个 EventLoop
+> ```
+> EventLoop loop_;
+> ```
+>  2. 声明一个 Server ,并为其指定对应的 EventLoop ， 线程池的线程数， 监听端口
+> ```
+> Server myServer_(&loop_,4,80);
+> ```
+> 3. 为 Server 设置对应的各种事件回调
+> ```
+> void readCallback(shared_ptr<Channel> ch){ …… };
+> void writeCallback(shared_ptr<Channel> ch){ …… };
+> void errorCallback(shared_ptr<Channel> ch){ …… };
+> myServer_.setReadCallback(readCallback);
+> myServer_.setWriteCallback(writeCallback);
+> myServer_.setErrorCallback(errorCallback);
+> ```
+> 4. 启动 Server
+> ```
+> myServer_.start();
+> loop_.loop();
+> ```
+
+
+
+
+
 
 ## fd 管理
 * Channel 类： 负责一个 fd 的事件，包含 fd 和 fd 事件的各种回调函数
-* EventLoop 类： 每一个线程包含一个 EventLoop 对象，对 IO 线程（即 SubReactor）而言，每个EventLoop包含一个 Epoll ,管理多个 fd,即关联多个Channel,作为一个时间循环处理Epoll中的活跃事件。
+* EventLoop 类： 每一个线程包含一个 EventLoop 对象，对 IO 线程（即 SubReactor）而言，每个EventLoop包含一个 Epoll ,管理多个 fd,即关联多个Channel,作为一个时间循环处理Epoll中的活跃事件，EventLoop 的核心一个 while 循环,循环处理事件。
 
 ## 多线程管理
-* EventLoop : EventLoop 包含一个 Epoll， EventLoop 的核心一个 while 循环,循环处理事件。
 * EventLoopThread : 包含一个 EventLoop , 封装了其在线程池中的创建销毁同步等线程相关操作。
 * EventLoopThreadPool : 线程池，负责创建和维护线程池中的线程，向线程池中的线程分配任务。
 
@@ -24,7 +57,7 @@ C++ Library for server
  * 条件变量 :封装了Condition 和 CountDownLatch 用以保证线程间同步
  * Epoll ：对 epoll 的封装
  
- ## 网络（进展中）
+ ## 网络
  * Server ：用于编写网络服务器，接受客户连接，封装繁杂的函数
  * Util ： 包含对的 socket 的读写和设置等操作。 
  
@@ -45,13 +78,3 @@ C++ Library for server
   * LogStream 重载各种<<运算符
   * Logging 对外的接口，内涵一个LogStream对象，在每次打Log时为其添加 文件名 和 行数 等格式化信息。
   
-  
- 
- 
- 
- 
- 
- 
- 
- 
- 
