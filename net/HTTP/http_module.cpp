@@ -2,65 +2,85 @@
 using std::string;
 
 
-bool http_module::setMethod(const char* begin,const char* end)
+bool http_module::setMethod(const string& str)
 {
-    string str(begin,end);
     if(str == "GET")method_ = GET;
     else if(str == "POST")method_ =  POST;
     else if(str == "HEAD")method_ =  HEAD;
     else if(str == "PUT")method_ =  PUT;
     else if(str == "DELETE")method_ =  DELETE;
-    return method_ != DEFUALT;
+    return method_ != DEFAULT;
 }
 
 
 
 //请求行解析
-bool http_module::processRequestLine(const char* begin,const char* end)
+bool http_module::processRequestLine(const string& request)
 {
     if(processSucceed)return true;
-    const char* start = begin;
-    const char* space = std::find(start,end,' ');
-    if(space != end && setMethod(start,end))
+    int start = 0;
+    int space = request.find(" ");
+    string method = request.substr(0,space);
+    string path,query;
+    if(space < request.length() && setMethod(method))
     {
-        ++start;
-        space =std::find(start,end,' ');
-        const char* question = std::find(start,space,'?');
-        setPath(start,question);
-        if(question != space)setQuery(question,space);
-        ++start;
-        processSucceed = end-start == 8 && std::equal(start, end-1, "HTTP/1.");
-        if (processSucceed)
+        start = space +1;
+        space = request.find(" ",start);
+        int question = request.find("?",start,space);
+        if(question == string::npos)
         {
-            if (*(end-1) == '1')
-            {
-                setVersion(HTTP_11);
-            }
-            else if (*(end-1) == '0')
-            {
-                setVersion(HTTP_10);
-            }
-            else
-            {
-                return processSucceed = false;
-            }
+            path = request.substr(start,space - start);
+            setPath(path);
+        }else{
+            path = request.substr(start,question - start);
+            setPath(path);
+            query = request.substr(question + 1,space -question -1);
+            setQuery(query);
+            parseArgs(query);
         }
+        
+        start = space + 1;
+        if(request.find("HTTP/1.1") != string::npos)
+        {
+            setVersion(HTTP_11);
+        }
+        else if(request.find("HTTP/1.0") != string::npos)
+        {
+            setVersion(HTTP_10);
+        }
+        
     }
 
     return processSucceed = true;
 }
 
-bool http_module::parseHeaders(const char* begin,const char* end)
+bool http_module::parseArgs(const string& str)
 {
-    const char* start = begin;
-    const char* step;
-    const char* equal_s;
-    while(start < end)
+    string key,value;
+    int start = 0;
+    while(start < str.length())
     {
-        step = std::equal(start,end,"\r\n");
-        equal_s = std::find(start,end,'=');
-        headers_[string(start,equal_s)] = string(equal_s + 1,step);
-        start = step + 2;
+        int mid = str.find("&",start);
+        int sig = str.find("=",start);
+        key = str.substr(start,sig);
+        value = str.substr(sig + 1,mid);
+        args_[key] = value;
+        start = mid + 1;
+    }
+}
+
+
+bool http_module::parseHeaders(const string& str)
+{
+    int start = 0,step,equal_s;
+    while(start < str.length())
+    {
+        step = str.find("\r\n",start);
+        equal_s = str.find(":",start);
+        if(equal_s == string::npos)break;
+        headers_[str.substr(start,equal_s - start)] = str.substr(equal_s + 1,step - equal_s -1);
+        if(step != string::npos)start = step + 2;
+        else break;
     }
     return true;
 }
@@ -69,13 +89,17 @@ bool http_module::parseHeaders(const char* begin,const char* end)
 
 bool http_module::parseRequest()
 {
-    const char* start = buf_.data();
-    const char* request_line_end = buf_.data() + buf_.find("\r\n");
-    processRequestLine(start,request_line_end);
+    int start = 0;
+    string requestLine,headers,body;
+    int  request_line_end = buf_.find("\r\n");
+    requestLine = buf_.substr(start,request_line_end - start);
+    processRequestLine(requestLine);
     //start += 2;
-    const char* headers_end = std::find(buf_.data(),buf_.end(),"\r\n\r\n");
-    parseHeaders(request_line_end + 2,headers_end);
-    setBody(headers_end + 2,buf_.data() + buf_.length());
+    int headers_end = buf_.find("\r\n\r\n");
+    headers =  buf_.substr(request_line_end + 2,headers_end - request_line_end -2);
+    parseHeaders(headers);
+    body = buf_.substr(headers_end + 4,buf_.length() - headers_end);
+    setBody(body);
 
     return true;
 }

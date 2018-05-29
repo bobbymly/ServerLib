@@ -16,42 +16,71 @@ enum State
 };
 enum Method
 {
-    DEFUALT,GET,POST,HEAD,PUT,DELETE
+    DEFAULT,GET,POST,HEAD,PUT,DELETE
 };
 enum Version
 {
     HTTP_10,HTTP_11,HTTP_20
 };
 
-http_module():
-    processSucceed(false),
-    method_(DEFUALT)
-{   }
-
-bool setMethod(const char* begin,const char* end);
-void setPath(const char* begin,const char* end)
-{   path_.assign(begin,end);}
-
-void setQuery(const char* begin,const char* end)
-{   query_.assign(begin,end);}
-
-void setBody(const char* begin,const char* end)
+string MethodToString()
 {
-    body_.assign(begin,end);
+    switch(method_)
+    {
+        case 1: return "GET";
+        case 2: return "POST";
+        case 3: return "HEAD";
+        case 4: return "PUT";
+        case 5: return "DELETE";
+        default: return "DEFAULT";
+    }
 }
+
+string VersionToString()
+{
+    switch(version_)
+    {
+        case 0: return "HTTP/1.0";
+        case 1: return "HTTP/1.1";
+        case 2: return "HTTP/2.0";
+    }
+}
+http_module(string buf):
+    buf_(buf),
+    processSucceed(false),
+    method_(DEFAULT)
+{   this->parseRequest();}
+
+bool setMethod(const string& str);
+void setPath(const string& str)
+{   path_ = str;}
+
+void setQuery(const string& str)
+{   query_ = str;}
+
+void setBody(const string& str)
+{   body_ = str;}
 void setVersion(Version v)
 {   version_ = v;}
-bool processRequestLine(const char* begin, const char* end);
-bool parseHeaders(const char* begin,const char* end);
-
+bool processRequestLine(const string& str);
+bool parseHeaders(const string& str);
+bool parseArgs(const string& str);
 bool parseRequest();
 
 void showDetail()
 {
-    cout<<"Version:"<<version_<<endl;
-    cout<<"Method:"<<method_<<endl;
+    cout<<"Version:"<<VersionToString()<<endl;
+    cout<<"Method:"<<MethodToString()<<endl;
     cout<<"Path:"<<path_<<endl;
+    cout<<"Args:"<<endl;
+    for(auto it = args_.begin();it != args_.end();++it)
+    {
+        cout<<it->first<<":"<<it->second<<end;
+    }
+    
+    
     cout<<"Headers:"<<endl;
+
     for(auto it = headers_.begin();it != headers_.end();it ++)
     {
         cout<<it->first<<":"<<it->second<<endl;
@@ -74,4 +103,5 @@ private:
     string query_;
     string body_;
     map <string,string> headers_;
+    map <string,string> args_;
 };
