@@ -1,3 +1,4 @@
+#pragma once
 #include "../../base/Logging.h"
 //#include "../../base/FixedBuffer.h"
 #include <iostream>
@@ -5,11 +6,6 @@
 #include <map>
 using namespace std;
 
-
-
-class http_module
-{
-public:
 enum State
 {
 
@@ -22,6 +18,11 @@ enum Version
 {
     HTTP_10,HTTP_11,HTTP_20
 };
+
+class http_request
+{
+public:
+
 
 string MethodToString()
 {
@@ -44,8 +45,9 @@ string VersionToString()
         case 1: return "HTTP/1.1";
         case 2: return "HTTP/2.0";
     }
+    return "ERROR";
 }
-http_module(string buf):
+http_request(const string& buf):
     buf_(buf),
     processSucceed(false),
     method_(DEFAULT)
@@ -53,7 +55,22 @@ http_module(string buf):
 
 bool setMethod(const string& str);
 void setPath(const string& str)
-{   path_ = str;}
+{   
+    path_ = str;
+    setContentType();
+}
+
+void setContentType()
+{
+    int pos = path_.find(".");
+    if(pos != string::npos)
+    {
+        content_type_ = path_.substr(pos + 1,path_.length() - pos - 1);
+    }
+}
+
+string getContentType()
+{   return content_type_;}
 
 void setQuery(const string& str)
 {   query_ = str;}
@@ -67,15 +84,19 @@ bool parseHeaders(const string& str);
 bool parseArgs(const string& str);
 bool parseRequest();
 
+string& getPath()
+{   return path_;}
+
 void showDetail()
 {
     cout<<"Version:"<<VersionToString()<<endl;
     cout<<"Method:"<<MethodToString()<<endl;
     cout<<"Path:"<<path_<<endl;
+    cout<<"Query:"<<query_<<endl;
     cout<<"Args:"<<endl;
     for(auto it = args_.begin();it != args_.end();++it)
     {
-        cout<<it->first<<":"<<it->second<<end;
+        cout<<it->first<<":"<<it->second<<endl;
     }
     
     
@@ -99,6 +120,7 @@ private:
     Method method_;
     Version version_;
     bool processSucceed;
+    string content_type_;
     string path_;
     string query_;
     string body_;

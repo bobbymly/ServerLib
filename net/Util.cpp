@@ -7,7 +7,10 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netinet/tcp.h>
+#include <algorithm>
+#include <iostream>
 
+using namespace std;
 const int MAX_BUFF = 4096;
 ssize_t readn(int fd, void *buff, size_t n)
 {
@@ -113,6 +116,31 @@ ssize_t readn(int fd, std::string &inBuffer)
     return readSum;
 }
 
+
+long long writen (int fd,const void *ptr,long long n)
+{
+    long long   nleft;
+    long long   nwritten;
+    nleft=n;
+ 
+    while ( nleft>0 )
+    {
+        if( ( nwritten=write( fd, ptr, nleft ) )<=0 )
+        {
+            if(errno == EINTR || errno == EWOULDBLOCK || errno == EAGAIN)
+            {
+                continue;
+            }else{
+                return nwritten;
+            }
+        }
+        nleft-=nwritten;
+        ptr+=nwritten;
+    }
+
+    return (n);
+}
+ 
 
 ssize_t writen(int fd, void *buff, size_t n)
 {

@@ -1,8 +1,8 @@
-#include "http_module.h"
+#include "http_request.h"
 using std::string;
 
 
-bool http_module::setMethod(const string& str)
+bool http_request::setMethod(const string& str)
 {
     if(str == "GET")method_ = GET;
     else if(str == "POST")method_ =  POST;
@@ -15,7 +15,7 @@ bool http_module::setMethod(const string& str)
 
 
 //请求行解析
-bool http_module::processRequestLine(const string& request)
+bool http_request::processRequestLine(const string& request)
 {
     if(processSucceed)return true;
     int start = 0;
@@ -26,7 +26,7 @@ bool http_module::processRequestLine(const string& request)
     {
         start = space +1;
         space = request.find(" ",start);
-        int question = request.find("?",start,space);
+        int question = request.find("?",start);
         if(question == string::npos)
         {
             path = request.substr(start,space - start);
@@ -54,23 +54,28 @@ bool http_module::processRequestLine(const string& request)
     return processSucceed = true;
 }
 
-bool http_module::parseArgs(const string& str)
+bool http_request::parseArgs(const string& str)
 {
     string key,value;
     int start = 0;
     while(start < str.length())
     {
         int mid = str.find("&",start);
+        if(mid == string::npos)mid = str.length()-1;
         int sig = str.find("=",start);
-        key = str.substr(start,sig);
-        value = str.substr(sig + 1,mid);
+        if(sig == string::npos)sig = str.length();
+        key = str.substr(start,sig-start);
+        
+        value = str.substr(sig + 1,mid - sig -1);
         args_[key] = value;
+        //cout<<"key:"<<key<<" value:"<<value<<endl;
         start = mid + 1;
     }
+    return true;
 }
 
 
-bool http_module::parseHeaders(const string& str)
+bool http_request::parseHeaders(const string& str)
 {
     int start = 0,step,equal_s;
     while(start < str.length())
@@ -87,7 +92,7 @@ bool http_module::parseHeaders(const string& str)
 
 
 
-bool http_module::parseRequest()
+bool http_request::parseRequest()
 {
     int start = 0;
     string requestLine,headers,body;

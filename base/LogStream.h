@@ -32,9 +32,9 @@ public:
 			cur_+=len;
 		}
 	}
-
-private:
 	const char* end() const{ return data_+sizeof data_;}
+private:
+
 	char data_[SIZE];
 	char* cur_;
 };
