@@ -41,6 +41,7 @@ public:
         std::ifstream file(file_name);
         if(!file.is_open())
         {
+            response.setCode(404);
             write(fd,response.getResponse().c_str(),response.getTotalLength());
             return ;
         }
