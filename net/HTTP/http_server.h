@@ -28,18 +28,12 @@ public:
     void start()
     {   myServer_.start();}
 
-    void readCB(shared_ptr <Channel> ch)
+    void getMethod(http_request& req,int fd)
     {
-        int fd = ch -> getFd();
         http_response response;
-        char buf[1024*1000];
-        int n=readn(fd,buf,sizeof buf);
-        http_request request(buf);
-        //request.showDetail();
         string file_name;
-        if(request.getPath() == "/")file_name = root_path_ + "/index.html";
-        else file_name = root_path_ + request.getPath();
-        //cout<<"file_name:"<<file_name<<endl;
+        if(req.getPath() == "/")file_name = root_path_ + "/index.html";
+        else file_name = root_path_ + req.getPath();
         std::ifstream file(file_name);
         if(!file.is_open())
         {
@@ -48,12 +42,44 @@ public:
             return ;
         }
         response.setCode(200);
-        response.setContentType(request.getContentType());
-        std::stringstream buffer;  
+        response.setContentType(req.getContentType());
+        std::stringstream buffer;
         buffer << file.rdbuf();  
         response.setPage(buffer.str());
 
         writen(fd,response.getResponse().c_str(),response.getResponse().length());
+    }
+
+
+    void readCB(shared_ptr <Channel> ch)
+    {
+        int fd = ch -> getFd();
+        //http_response response;
+        char buf[1024*1000];
+        readn(fd,buf,sizeof buf);
+        http_request request(buf);
+        getMethod(request,fd);
+
+
+        //request.showDetail();
+        // string file_name;
+        // if(request.getPath() == "/")file_name = root_path_ + "/index.html";
+        // else file_name = root_path_ + request.getPath();
+        // //cout<<"file_name:"<<file_name<<endl;
+        // std::ifstream file(file_name);
+        // if(!file.is_open())
+        // {
+        //     response.setCode(404);
+        //     write(fd,response.getResponse().c_str(),response.getResponse().length());
+        //     return ;
+        // }
+        // response.setCode(200);
+        // response.setContentType(request.getContentType());
+        // std::stringstream buffer;  
+        // buffer << file.rdbuf();  
+        // response.setPage(buffer.str());
+
+        // writen(fd,response.getResponse().c_str(),response.getResponse().length());
 
         close(fd);
     }

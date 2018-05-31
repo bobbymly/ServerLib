@@ -15,10 +15,7 @@ public:
         status_code_(404),
         version_(HTTP_11),
         content_type_("text/html")
-
-    {
-
-    }
+    {    }
 
 
     void setDate(const string& str)
@@ -65,7 +62,6 @@ public:
             content_type_ = "text/plain";
         else if(str == "pic")
             content_type_ = "application/x-pic";
-            
     }
 private:
     bool parse_;
@@ -77,5 +73,4 @@ private:
     map <string,string> cookie_;
     string page_;
     string response_;
-
 };
