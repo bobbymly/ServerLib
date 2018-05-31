@@ -76,28 +76,9 @@ string& http_response::getResponse()
 
 void http_response::countLengthToString()
 {
-    int length = response_.length();
-    length += page_.length();
-    content_length_ = page_.length();
-    length += strlen("Content-Length: \r\n\r\n");
-    int n1=0,n2=0,temp = length;
-    while(temp)
-    {
-        ++n1;
-        temp /= 10;
-    }
-    length += n1;
-    temp = length;
-    while(temp)
-    {
-        ++n2;
-        temp /= 10;
-    }
-    if(n2>n1)length++;
     content_length_string_.clear();
     content_length_string_ = "Content-Length: "; 
-    content_length_string_ += to_string(content_length_);
+    content_length_string_ += to_string(page_.length());
     content_length_string_ += "\r\n\r\n";
-    total_length_ = length;
 }
 

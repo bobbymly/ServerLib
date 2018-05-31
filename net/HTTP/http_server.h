@@ -30,19 +30,21 @@ public:
 
     void readCB(shared_ptr <Channel> ch)
     {
-        cout<<"read"<<endl;
         int fd = ch -> getFd();
         http_response response;
         char buf[1024*1000];
         int n=readn(fd,buf,sizeof buf);
         http_request request(buf);
-        request.showDetail();
-        string file_name = root_path_ + request.getPath();
+        //request.showDetail();
+        string file_name;
+        if(request.getPath() == "/")file_name = root_path_ + "/index.html";
+        else file_name = root_path_ + request.getPath();
+        //cout<<"file_name:"<<file_name<<endl;
         std::ifstream file(file_name);
         if(!file.is_open())
         {
             response.setCode(404);
-            write(fd,response.getResponse().c_str(),response.getTotalLength());
+            write(fd,response.getResponse().c_str(),response.getResponse().length());
             return ;
         }
         response.setCode(200);
@@ -51,28 +53,13 @@ public:
         buffer << file.rdbuf();  
         response.setPage(buffer.str());
 
-        const char* write_buf = response.getResponse().c_str();
-        long long total_size = response.getResponse().length();
-        long long sendBytes = 0,temp = 1;
-        sendBytes = writen(fd,write_buf,total_size);
-        // while(sendBytes < total_size)
-        // {
-        //     temp= send(fd,write_buf,2000);
-        //     cout<<temp<<endl;
-        //     write_buf += temp;
-        //     sendBytes += temp;
-        // }
-        //cout<<response.getResponse().c_str()<<endl;
-        cout<<response.getResponse().length()<<endl;
-        cout<<"send:"<<sendBytes<<" bytes"<<endl;
+        writen(fd,response.getResponse().c_str(),response.getResponse().length());
+
         close(fd);
-        //close(file);
-        cout<<"read over"<<endl;
     }
 
 private:
-    //http_request request_;
-    //http_response response_;
+
     Server myServer_;
     string root_path_;
 };

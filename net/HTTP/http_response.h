@@ -12,8 +12,6 @@ class http_response
 public:
     http_response():
         parse_(false),
-        content_length_(0),
-        total_length_(0),
         status_code_(404),
         version_(HTTP_11),
         content_type_("text/html")
@@ -35,11 +33,6 @@ public:
     {   page_ = str;}
 
     string& getResponse();
-    int getTotalLength()
-    {   
-        if(total_length_ == 0)getResponse();
-        return total_length_;
-    }
 
     void setCode(int code)
     {
@@ -48,10 +41,31 @@ public:
 
     void setContentType(const string& str)
     {
-        if(str == "txt" || str == "html" || str == "htm")
+        if(str == "txt" || str == "html" || str == "htm" || str == "jsp")
             content_type_ = "text/html";
-        if(str == "js")
+        else if(str == "js")
             content_type_ = "application/javascript";
+        else if(str == "asp")
+            content_type_ = "text/asp";
+        else if(str == "bmp")
+            content_type_ = "application/x-bmp";
+        else if(str == "ico")
+            content_type_ = "image/x-icon";
+        else if(str == "img")
+            content_type_ = "application/x-img";        
+        else if(str == "java")
+            content_type_ = "java/*";        
+        else if(str == "jpe" || str =="jpeg" ||str == "jpg")
+            content_type_ = "image/jpeg";
+        else if(str == "png")
+            content_type_ = "application/x-png";
+        else if(str == "xml" || str == "svg")
+            content_type_ = "text/xml";
+        else if(str == "txt")
+            content_type_ = "text/plain";
+        else if(str == "pic")
+            content_type_ = "application/x-pic";
+            
     }
 private:
     bool parse_;
@@ -60,8 +74,6 @@ private:
     string content_type_;
     string date_;
     string content_length_string_;
-    int content_length_;
-    int total_length_;
     map <string,string> cookie_;
     string page_;
     string response_;

@@ -47,7 +47,7 @@ int main()
 {
     EventLoop loop_;
     //TestServer myServer_(&loop_,4,80);
-    http_server myServer_("/home/centos/web/",&loop_,4,80);
+    http_server myServer_("/home/centos/web",&loop_,4,80);
     
     myServer_.start();
     loop_.loop();

@@ -77,7 +77,7 @@ void Server::handNewConn()
 		ch->setReadHandler(std::bind(readCallback_,ch));
 		ch->setWriteHandler(std::bind(writeCallback_,ch));
 		ch->setErrorHandler(std::bind(errorCallback_,ch));
-		//ch->setCloseHandler()
+
 		ch->setEvents(EPOLLIN | EPOLLET | EPOLLHUP|EPOLLRDHUP);
 
 		//loop->queueInLoop(std::bind(addChToLoop,ch,loop));
