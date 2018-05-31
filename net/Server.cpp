@@ -82,7 +82,7 @@ void Server::handNewConn()
 
 		//loop->queueInLoop(std::bind(addChToLoop,ch,loop));
 		//loop->addToPoller(ch);
-		loop_->addToPoller(ch);
+		loop->addToPoller(ch);
 	}
 	acceptChannel_->setEvents(EPOLLIN|EPOLLET);
 }

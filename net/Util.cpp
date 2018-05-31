@@ -122,10 +122,10 @@ long long writen (int fd,const void *ptr,long long n)
     long long   nleft;
     long long   nwritten;
     nleft=n;
- 
+
     while ( nleft>0 )
     {
-        if( ( nwritten=write( fd, ptr, nleft ) )<=0 )
+        if( ( nwritten=write( fd, ptr, nleft ) )<0 )
         {
             if(errno == EINTR || errno == EWOULDBLOCK || errno == EAGAIN)
             {
@@ -134,6 +134,7 @@ long long writen (int fd,const void *ptr,long long n)
                 return nwritten;
             }
         }
+        if(nwritten == 0)break;
         nleft-=nwritten;
         ptr+=nwritten;
     }
