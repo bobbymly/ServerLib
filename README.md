@@ -15,6 +15,10 @@ C++ Library for server
 ![](https://github.com/bobbymly/ServerLib/blob/master/pic/show.png?raw=true)
 
 ## 使用说明
+> 0. 包含头文件 Server.h
+> ```
+> #include "net/Server.h"
+> ```
 > 1. 声明一个 EventLoop
 > ```
 > EventLoop loop_;
