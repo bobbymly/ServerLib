@@ -74,10 +74,11 @@ void Server::handNewConn()
 		shared_ptr<Channel> ch(new Channel(loop,accept_fd));
 	//	ch->setEvents(EPOLLIN|EPOLLHUP|EPOLLRDHUP);
 		//ch->setReadHandler(std::bind(&Channel::readAll,ch));
-		ch->setReadHandler(std::bind(readCallback_,ch));
-		ch->setWriteHandler(std::bind(writeCallback_,ch));
-		ch->setErrorHandler(std::bind(errorCallback_,ch));
-
+		weak_ptr<Channel> weakCh = ch;
+		ch->setReadHandler(std::bind(readCallback_,weakCh));
+		ch->setWriteHandler(std::bind(writeCallback_,weakCh));
+		ch->setErrorHandler(std::bind(errorCallback_,weakCh));
+		//ch->setCloseHandler(std::bind(closeCallback_,ch));
 		ch->setEvents(EPOLLIN | EPOLLET | EPOLLHUP|EPOLLRDHUP);
 
 		//loop->queueInLoop(std::bind(addChToLoop,ch,loop));
@@ -86,12 +87,3 @@ void Server::handNewConn()
 	}
 	acceptChannel_->setEvents(EPOLLIN|EPOLLET);
 }
-
-
-
-
-// void HttpData::newEvent()
-// {
-//     channel_->setEvents(DEFAULT_EVENT);
-//     loop_->addToPoller(channel_, DEFAULT_EXPIRED_TIME);
-// }

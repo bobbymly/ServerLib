@@ -55,7 +55,9 @@ string& http_response::getResponse()
     }
     //if(status_code_ != 200)return response_;
     response_ += "Content-Type: ";
-    response_+= content_type_ + "\r\n";
+    response_ += content_type_ + "\r\n";
+    response_ += "Connection: ";
+    response_ += connection_ + "\r\n";
     for(auto it = cookie_.begin();it != cookie_.end();it++)
     {
         response_ += "Set-Cookie: ";

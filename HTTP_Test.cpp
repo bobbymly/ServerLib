@@ -24,22 +24,22 @@ void readCallback(shared_ptr<Channel> ch)
 
 
 
-class TestServer
-{
-public:
+// class TestServer
+// {
+// public:
 
-    TestServer(EventLoop* loop,int threadNum,int port):
-        myServer_(loop,threadNum,port)
-    {
-        myServer_.setReadCallback(readCallback);
-    }
-    void start()
-    {
-        myServer_.start();
-    }
-private:
-    Server myServer_;
-};
+//     TestServer(EventLoop* loop,int threadNum,int port):
+//         myServer_(loop,threadNum,port)
+//     {
+//         myServer_.setReadCallback(readCallback);
+//     }
+//     void start()
+//     {
+//         myServer_.start();
+//     }
+// private:
+//     Server myServer_;
+// };
 
 
 

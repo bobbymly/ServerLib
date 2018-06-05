@@ -14,7 +14,6 @@ bool http_request::setMethod(const string& str)
 
 
 
-//请求行解析
 bool http_request::processRequestLine(const string& request)
 {
     if(processSucceed)return true;
@@ -99,7 +98,6 @@ bool http_request::parseRequest()
     int  request_line_end = buf_.find("\r\n");
     requestLine = buf_.substr(start,request_line_end - start);
     processRequestLine(requestLine);
-    //start += 2;
     int headers_end = buf_.find("\r\n\r\n");
     headers =  buf_.substr(request_line_end + 2,headers_end - request_line_end -2);
     parseHeaders(headers);

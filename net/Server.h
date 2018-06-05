@@ -4,7 +4,7 @@
 #include "EventLoopThreadPool.h"
 #include <memory>
 
-typedef std::function<void(shared_ptr<Channel>)> CallBackWithCh;
+typedef std::function<void(weak_ptr<Channel>)> CallBackWithCh;
 
 class Server
 {
@@ -31,11 +31,16 @@ public:
 	{
 		errorCallback_ = cb;
 	}
+
+	void setCloseCallback(CallBackWithCh cb )
+	{
+		closeCallback_ = cb;
+	}
 private:
 	CallBackWithCh readCallback_;
 	CallBackWithCh writeCallback_;
 	CallBackWithCh errorCallback_;
-	//Callback closeCallback_; 
+	CallBackWithCh closeCallback_; 
 
 	EventLoop *loop_;
 	int threadNum_;

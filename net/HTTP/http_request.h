@@ -1,6 +1,5 @@
 #pragma once
 #include "../../base/Logging.h"
-//#include "../../base/FixedBuffer.h"
 #include <iostream>
 #include <string>
 #include <map>
@@ -53,6 +52,10 @@ http_request(const string& buf):
     method_(DEFAULT)
 {   this->parseRequest();}
 
+Method getMethod()
+{   return method_;}
+
+
 bool setMethod(const string& str);
 void setPath(const string& str)
 {   
@@ -86,6 +89,9 @@ bool parseRequest();
 
 string& getPath()
 {   return path_;}
+
+map<string,string> & getHeaders()
+{   return headers_;}
 
 void showDetail()
 {

@@ -9,11 +9,12 @@
 #include <iostream>
 #include <sstream>
 #include <unistd.h>
+//#include "EventLoop.h"
 class EventLoop;
 
 typedef std::function<void()> CallBack;
 
-class Channel
+class Channel: public std::enable_shared_from_this<Channel>
 {
 public:
 	Channel(EventLoop *loop);
@@ -37,6 +38,10 @@ public:
 	void setConnHandler(CallBack &&connHandler)
 	{
 		connHandler_=connHandler;
+	}
+	void setCloseHandler(CallBack &&closeHandler)
+	{
+		closeHandler_=closeHandler;
 	}
 
 
@@ -71,6 +76,9 @@ public:
 		{
 			LOG <<"CLOSE EVENT";
 			events_=0;
+			// if(closeHandler_)closeHandler_();
+			// else 
+			closeChannel();
 			return;
 		}
 		if(revents_&EPOLLERR)
@@ -94,11 +102,17 @@ public:
 		handleConn();
 	}
 
+	// void defaultCloseHandler()
+	// {
+	// 	std::shared_ptr<Channel> ch = shared_from_this();
+	// 	loop_ -> removeFromPoller(ch);
+	// }
+
 	void handleRead();
 	void handleWrite();
 	void handleError(int fd,int err_num,std::string short_msg);
 	void handleConn();
-
+	void handleClose();
 	void setRevents(__uint32_t revents)
 	{
 		revents_=revents;
@@ -123,6 +137,7 @@ public:
 		return lastEvents_;
 	}
 
+	void closeChannel();
 
 
 private:
@@ -142,6 +157,7 @@ private:
 	CallBack writeHandler_;
 	CallBack errorHandler_;
 	CallBack connHandler_;
+	CallBack closeHandler_;
 };
 
 

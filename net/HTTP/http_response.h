@@ -14,7 +14,8 @@ public:
         parse_(false),
         status_code_(404),
         version_(HTTP_11),
-        content_type_("text/html")
+        content_type_("text/html"),
+        connection_("Keep-Alive")
     {    }
 
 
@@ -67,6 +68,7 @@ private:
     bool parse_;
     Version version_;
     int status_code_;
+    string connection_;
     string content_type_;
     string date_;
     string content_length_string_;

@@ -23,7 +23,16 @@ Channel::Channel(EventLoop *loop,int fd):
 
 Channel::~Channel()
 {
-    close(fd_);
+	close(fd_);
+	//cout<<"~Channel()"<<endl;
+}
+
+void Channel::closeChannel()
+{
+	std::shared_ptr<Channel> ch = shared_from_this();
+	//cout<<"count = "<<ch.use_count()<<endl;
+	loop_ -> removeFromPoller(ch);
+	//close(fd_);
 }
 
 int Channel::getFd()
@@ -60,3 +69,10 @@ void Channel::handleConn()
 	}
 }
 
+void Channel::handleClose()
+{
+	if(closeHandler_)
+	{
+		closeHandler_();
+	}
+}
